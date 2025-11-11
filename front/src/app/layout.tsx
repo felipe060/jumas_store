@@ -22,19 +22,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body
         className={cn(
           "min-h-screen flex flex-col bg-background text-foreground font-sans",
-          geistSans.className
+          geistSans.variable,
+          geistMono.variable
         )}
       >
         <Header />
-        <main className="flex-1 container mx-auto px-4 py-8">{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
       </body>
     </html>

@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧡 Jumas Store
 
-## Getting Started
+Aplicação fullstack desenvolvida com foco em apresentar os produtos, notícias e informações da **Jumas Store**, unindo conteúdo institucional e e-commerce em um layout moderno, responsivo e intuitivo.
 
-First, run the development server:
+## 🚀 Tecnologias Utilizadas
+
+### 🖥️ Frontend
+- **Next.js 14 (App Router)** — estrutura principal do projeto  
+- **React 18 + TypeScript** — base da interface e tipagem estática  
+- **TailwindCSS + shadcn/ui** — estilização moderna e componentes reutilizáveis  
+- **Lucide React** — ícones vetoriais leves e personalizáveis  
+- **Axios** — consumo de APIs e integração de dados  
+- **Framer Motion** — animações suaves e profissionais  
+
+### 🧩 Organização
+- **Arquitetura modularizada**: páginas divididas por rotas (`/produtos`, `/noticias`, `/sobre`)  
+- **Rota dinâmica para notícias**: `/noticias/[id]` exibe detalhes individuais  
+- **Componentes reutilizáveis**: cards, navbar, footer, botões e seções  
+
+### 🛒 Estrutura do Projeto
+- **Home (Produtos)** – página principal do e-commerce  
+- **Notícias** – exibição de artigos e novidades da loja  
+- **Sobre** – apresentação da história, propósito e meios de contato  
+
+---
+
+## 📦 Instalação
 
 ```bash
+# Clone o repositório
+git clone https://github.com/gui-hmm/jumas-store.git
+
+# Acesse a pasta
+cd jumas-store
+
+# Instale as dependências
+npm install
+
+# Execute o projeto
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 💡 Próximos Passos
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Integração com sistema de pagamentos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Implementação de carrinho e autenticação de usuários

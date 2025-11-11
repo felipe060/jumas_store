@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "title": "Ação solidária do Jumas movimenta a comunidade",
+    "description": "Voluntários se reuniram para promover doações e atividades educativas, reforçando o compromisso social do grupo.",
+    "image": "https://images.unsplash.com/photo-1588776814546-1ffcf47267a3?w=600"
+  },
+  {
+    "id": 2,
+    "title": "Nova linha de produtos sustentáveis chega à Jumas Store",
+    "description": "Itens ecológicos e de produção responsável agora estão disponíveis no e-commerce.",
+    "image": "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?w=600"
+  },
+  {
+    "id": 3,
+    "title": "Workshop de tecnologia reúne jovens do Jumas",
+    "description": "O evento destacou a importância da inovação e do aprendizado contínuo para o desenvolvimento pessoal e profissional.",
+    "image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600"
+  }
+]

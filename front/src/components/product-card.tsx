@@ -10,7 +10,7 @@ interface Product {
 
 export default function ProductCard({ product }: { product: Product }) {
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+    <Card className="overflow-hidden transition-all hover:scale-[1.02] hover:shadow-lg">
       <CardHeader className="p-0">
         <img
           src={product.image}

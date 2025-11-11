@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Camiseta Jumas Classic",
+    "price": 89.9,
+    "image": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600"
+  },
+  {
+    "id": 2,
+    "name": "Boné Jumas Explorer",
+    "price": 69.9,
+    "image": "https://images.unsplash.com/photo-1528701800489-20be3c2ea33d?w=600"
+  },
+  {
+    "id": 3,
+    "name": "Mochila Aventura",
+    "price": 199.9,
+    "image": "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?w=600"
+  }
+]
