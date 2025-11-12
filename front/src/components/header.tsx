@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./theme-toggle";
-import { ShoppingCart, Menu } from "lucide-react";
+import { ShoppingCart, Menu, LogOut, User } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -11,10 +11,22 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+
+  const [isLogged, setIsLogged] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLogged(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLogged(false);
+  };
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-md">
@@ -43,6 +55,25 @@ export default function Header() {
             <ShoppingCart size={16} />
             Carrinho
           </Button>
+
+          {isLogged ? (
+            <Button
+              size="icon"
+              variant="ghost"
+              aria-label="Sair"
+              onClick={handleLogout}
+            >
+              <LogOut size={18} />
+            </Button>
+          ) : (
+            <Link href="/login">
+              <Button size="icon" variant="ghost" aria-label="Entrar">
+                <User size={18} />
+              </Button>
+            </Link>
+          )}
+
+
           <ThemeToggle />
 
           {/* MENU MOBILE */}
