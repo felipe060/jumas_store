@@ -1,2 +1,4 @@
+import os
 print("hello, world")
-print("Mateus 22.37")
+print("mateus 22.37")
+print("jeremias 17.5")
