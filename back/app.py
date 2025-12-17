@@ -33,3 +33,14 @@ def index():
     return make_response(jsonify(social_media))
 
 
+@app.route("/verify_user", methods=["POST"])
+@require_token
+def verify_user():
+    """Route that verifies if the user and password are correct"""
+
+    print("app.py verify_user() being called\n")
+
+    content_type = str(request.headers["Content-Type"]).lower()
+
+    from sidetask import verify_header
+    
