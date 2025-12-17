@@ -6,3 +6,5 @@ test3.py
 .env
 ../.idea/
 ../.idea
+.gitignore
+
