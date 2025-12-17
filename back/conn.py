@@ -5,3 +5,6 @@ from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from dotenv import find_dotenv, load_dotenv
 from os import getenv, environ
 
+dotenv_path = find_dotenv()
+load_dotenv(dotenv_path)
+
