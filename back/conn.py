@@ -1,6 +1,4 @@
-from sqlalchemy import (create_engine, ForeignKey, Column as sql_column, String as sql_string,
-                        Integer as sql_integer, Date as sql_date, DateTime as sql_datetime, Float as sql_float,
-                        text as sql_text, Boolean as sql_boolean, sql, update)
+from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, Date, DateTime, Float, text, Boolean, sql, update, func
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from dotenv import find_dotenv, load_dotenv
 from os import getenv, environ
@@ -19,6 +17,22 @@ Session = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 
 class User(Base):
+    __tablename__ = "tb_users"
+
+    user_id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
+    user_email = Column(String(255), unique=True, nullable=False)
+    user_senha = Column(String(255), nullable=False)
+    name = Column(String(80), nullable=False, unique=False)
+    surname = Column(String(80), nullable=True, unique=False)
+    cpf = Column(String(20), nullable=True)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, nullable=False, default=func.now())
+
+
+Base.metadata.create_all(engine)
+
+
+"""class User(Base):
     __tablename__ = "tb_user"
 
     id_user = sql_column(sql_integer, autoincrement=True, nullable=False, primary_key=True)
@@ -38,7 +52,7 @@ class SessionCode(Base):
     lifetime = sql_column(sql_datetime, nullable=False)
     id_user = sql_column(sql_integer, ForeignKey("tb_user.id_user"),  nullable=False)
 
-    person_ = relationship("User", back_populates="sessioncode_")
+    person_ = relationship("User", back_populates="sessioncode_")"""
 
 
-Base.metadata.create_all(engine)
+
