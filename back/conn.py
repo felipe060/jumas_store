@@ -30,6 +30,7 @@ class User(Base):
 
     user_sessioncode = relationship("SessionCode", back_populates="id_usuario")
     user_address = relationship("Address", back_populates="id_usuario")
+    user_order = relationship("Order", back_populates="id_usuario")
 
 
 class SessionCode(Base):
@@ -60,6 +61,7 @@ class Address(Base):
     description = Column(String(50), nullable=True)
 
     id_usuario = relationship("User", back_populates="user_address")
+    id_order = relationship("Order", back_populates="id_address")
 
 
 class Product(Base):
@@ -74,14 +76,75 @@ class Product(Base):
     is_active = Column(Boolean, default=True, nullable=False)
     created_at = Column(DateTime, nullable=False, default=str(datetime_.now())[:-7])
 
+    id_produto = relationship("ProductVariant", back_populates="id_produto")
 
-#Base.metadata.create_all(engine)
+
+class ProductVariant(Base):
+    __tablename__ = "tb_product_variants"
+
+    variant_id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
+    product_id = Column(Integer, ForeignKey("tb_products.product_id"), nullable=False)
+    size = Column(String(10), nullable=False)
+    color = Column(String(50), nullable=False)
+    qtd_stock = Column(Integer, default=0)
+    code = Column(String(20), unique=True, nullable=True)
+
+    id_produto = relationship("Product", back_populates="id_produto")
+    id_variant = relationship("OrderItem", back_populates="id_variant")
 
 
-with Session() as session:
-    novo = Product(name="camisa t-shirt", material="algodão", gender="M", base_price=12.20)
+class Order(Base):
+    __tablename__ = "tb_orders"
+
+    order_id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
+    user_id = Column(Integer, ForeignKey("tb_users.user_id"), nullable=False)
+    address_id = Column(Integer, ForeignKey("tb_addresses.address_id"), nullable=False)
+    total_amount = Column(DECIMAL(10, 2), nullable=False)
+    status = Column(String(50), default="pending", nullable=False)
+    created_at = Column(DateTime, nullable=False, default=str(datetime_.now())[:-7])
+
+    id_usuario = relationship("User", back_populates="user_order")
+    id_address = relationship("Address", back_populates="id_order")
+    id_order = relationship("OrderItem", back_populates="id_order")
+
+
+class OrderItem(Base):
+    __tablename__ = "tb_order_items"
+
+    item_id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
+    order_id = Column(Integer, ForeignKey("tb_orders.order_id"), nullable=False)
+    variant_id = Column(Integer, ForeignKey("tb_product_variants.variant_id"), nullable=False)
+    qtd = Column(Integer, nullable=False)
+    unit_price = Column(DECIMAL(10, 2), nullable=False)
+
+    id_order = relationship("Order", back_populates="id_order")
+    id_variant = relationship("ProductVariant", back_populates="id_variant")
+
+
+Base.metadata.create_all(engine)
+
+"""with Session() as session:
+    novo = OrderItem(order_id=4, variant_id=1, qtd=4, unit_price=12.89)
     session.add(novo)
-    session.commit()
+    session.commit()"""
+
+
+"""with Session() as session:
+    novo = Order(user_id=1  , address_id=1, total_amount=12)
+    session.add(novo)
+    session.commit()"""
+
+
+"""with Session() as session:
+    novo = ProductVariant(product_id=2, size="M", color="Blue", qtd_stock=31, code="mk2-21-m")
+    session.add(novo)
+    session.commit()"""
+
+
+"""with Session() as session:
+    novo = Product(name="casaco mt loco", material="ferro fundido", gender="NB", base_price=24.13)
+    session.add(novo)
+    session.commit()"""
 
 '''with Session() as session:
     novo = Address(user_id=7, cep="53370351", street="rua Maria âugustã frança ferreirá", number=35, bairro="ouro preto", city="olinda", state="PE")
