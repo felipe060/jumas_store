@@ -128,18 +128,15 @@ Base.metadata.create_all(engine)
     session.add(novo)
     session.commit()"""
 
-
 """with Session() as session:
     novo = Order(user_id=1  , address_id=1, total_amount=12)
     session.add(novo)
     session.commit()"""
 
-
 """with Session() as session:
     novo = ProductVariant(product_id=2, size="M", color="Blue", qtd_stock=31, code="mk2-21-m")
     session.add(novo)
     session.commit()"""
-
 
 """with Session() as session:
     novo = Product(name="casaco mt loco", material="ferro fundido", gender="NB", base_price=24.13)
@@ -158,7 +155,6 @@ Base.metadata.create_all(engine)
     #sqlalchemy.exc.IntegrityError: (psycopg2.errors.ForeignKeyViolation) insert or update on table "tb_sessioncode" violates foreign key constraint "tb_sessioncode_user_id_fkey"
     """
 
-
 """with Session() as session:
     consulta = session.query(User.user_email).where(User.user_id == 2).first()
     #consulta = session.query(User).where(User.user_id == 2).first()
@@ -168,29 +164,16 @@ Base.metadata.create_all(engine)
     ala = consulta.user_email
     #print(consulta.is_active)"""
 
-
-
-
 """adicionar = User(user_email="sofia@hotmail.com", user_senha="senha_sofia", name="sofia")
 with Session() as session:
     session.add(adicionar)
     session.commit()
-
     #sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "tb_users_user_email_key"""
-
-
-
-
-
-
-
 
 """ola = datetime_.now()
 print(ola)
 oi = ola + timedelta(minutes=200)
 print("--> ", oi)"""
-
-
 
 """class User(Base):
     __tablename__ = "tb_user"
@@ -213,9 +196,6 @@ class SessionCode(Base):
     id_user = sql_column(sql_integer, ForeignKey("tb_user.id_user"),  nullable=False)
 
     person_ = relationship("User", back_populates="sessioncode_")"""
-
-
-
 
 """hora_agr = datetime_.now()          #just the current time
 futuro = hora_agr + timedelta(minutes=2)        #current time plus some minutes with timedelta() function
