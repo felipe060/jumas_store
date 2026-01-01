@@ -1,3 +1,4 @@
+import sqlalchemy.exc
 from conn import Session, User, SessionCode, Address, Product, ProductVariant, Order, OrderItem
 
 
@@ -94,4 +95,36 @@ def reset_password_on_database(email: str, new_password: str):
             return message
 
 
+def write_sessioncode_on_database(session_code: str, email: str):
+    print("database_conn.py write_sessioncode_on_database() being called\n")
+
+    with Session() as session:
+        consulta = session.query(User).where(User.user_email == email).first()
+        if consulta is None:
+            print("this email isnt written on the database\n")
+            message: dict = {"error": "this email isnt on our database"}
+            return message
+        id_usuario = consulta.user_id
+
+    write_sessioncode = SessionCode(sessioncode=session_code, user_id=1)
+    session.add(write_sessioncode)
+
+    import sqlalchemy
+
+    try:
+        session.commit()
+        print("sessioncode escrito no database\n")
+        message: dict = {"response": "sessioncode writtend down on database"}
+        print(message)
+        return True, message
+    except sqlalchemy.exc.IntegrityError as e:
+        print("acho q esse sessioncode ja existe no dataabase")
+        print(e)
+        message: dict = {"error": "this sessioncode is already written on database"}
+        return False, message
+    except sqlalchemy.exc.OperationalError as e:
+        print("acho q foi error de conexao com o database")
+        print("error -->", e)                                                           #im returning the same error as above to facilitate the handling
+        message: dict = {"error": "this sessioncode is already written on database"}    #but this error, i think is like the error on the line right bellow
+        return False, message                                                           #sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) SSL connection has been closed unexpectedly
 

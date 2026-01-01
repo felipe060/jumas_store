@@ -60,6 +60,14 @@ A successful message is returned on a dictionary if the user is added to the dat
 this error is returned as a dictionary
 
 
+reset_password_on_database() --> this function takes 2 arguments, "email" and "new_password". Both are strings. With Session()
+imported from conn.py, this function makes a query on the database, looking for an email equal to the email provided on the
+arguments. If the query`s result is None, the function return "False". If user != None, we use the method "update()" from
+sqlalchemy to update the table with the new_password. We try the session.commit(). If it success, we return a message as a
+dictionary. If some Exception is raised, we return a generic dictionary message cuz i didnt do a proper error handling on
+this function. I simply dont know what type of error it can generate
+
+
 
 
 
