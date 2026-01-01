@@ -1,0 +1,70 @@
+all the code is subject to improvement
+
+
+conn.py _____________________________________________________________________________
+
+the database is a postgresql hosted on neon.tech, a hoster with a free lil plan, that im using to host this database
+
+dotenv_path --> the path to .env file
+
+engine --> just the engine to connect to the database. Instead using the raw connection string, I chose to user the connection
+args, I think it is clearer to see what is being used in the connection
+
+Base --> just declaring the declarative_base() of sqlalchemy
+
+Session --> binding the session to the engine, saying explicitly that autoflush and autocommit are off
+
+class User --> user is the class that represents the table "tb_users" on database. The fields are user_id, user_email,
+user_senha, name, surname, cpf, phone, is_active, created_at. I think it is clear on the class which is the data type
+of each table`s field
+
+class SessionCode -> represents the table "tb_sessioncode" on database. The fields are sessioncode_id, user_id, sessioncode,
+created_at, expires_at. I think is also clear on the class which is the data type of each table`s field
+
+class Address --> represents the table "tb_addresses" on database. The fields are address_id, user_id, cep, street, number,
+complement, bairro, city, state, reference_point, description
+
+class Product --> represents the table "tb_products" on database. The fields are product_id, name, description, material,
+gender, base_price, is_active, created_at
+
+class ProductVariant --> represents the table "tb_product_variants" on database. The fields are variant_id, product_id,
+size, color, qtd_stock, code
+
+class Order --> represents the table "tb_orders on database". The fields are order_id, user_id, address_id, total_amount,
+status, created_at
+
+class OrderItem --> represents the table "tb_order_items on database". The fields are item_id, order_id, variant_id,
+qtd, unit_price
+
+
+
+
+
+database_conn.py ______________________________________________________________________________
+
+verify_on_database() --> this function takes 2 arguments "email" and "senha", both are strings. With the Session() imported
+from conn.py, this function makes a query on the database, through sqlalchemy, looking for the columns "user_email" and "user_senha"
+on the table "tb_users", represented by the class User on conn.py. It will try to look for where the "user_email" is the "email"
+received within the arguments. If the query, on the variable "consulta" returns None, then the function returns "False". If an
+exception occurs, it returns False too. If neither of these cases occur, I assume success, then "email_on_database" and
+"senha_on_database" are defined. If "email_on_database" and "senha_on_database" are equal to "email" and "senha" obtained by
+the arguments of the function, then it returns True, if one of those is different, the function returns False. Theoretically,
+"email_on_database" will never be different from "email", since if the "email" provided by the arguments is not found on the
+database, the function returns False and ends itself.
+
+
+add_to_database() --> this function takes 3 arguments "email", "senha" and "name", all of em are strings as indicated with
+type hints. With Session() imported from conn.py, the function creates a new user object of the User class with the parameters
+"user_email", "user_senha", "name". Then, adds this user to the session, and tries to commit this new_user to the database.
+A successful message is returned on a dictionary if the user is added to the database. If some error occur, a message reporting
+this error is returned as a dictionary
+
+
+
+
+
+
+
+
+
+

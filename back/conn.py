@@ -25,6 +25,7 @@ class User(Base):
     name = Column(String(80), nullable=False, unique=False)
     surname = Column(String(80), nullable=True, unique=False)
     cpf = Column(String(20), nullable=True)
+    phone = Column(String(20), nullable=True)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, nullable=False, default=func.now())
 
