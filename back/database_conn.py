@@ -58,6 +58,7 @@ def add_to_database(email: str, senha: str, name: str):
                 print("n era pra acontecer este error\n")
                 message: dict = {"error": "some column is missing on the commit to the database"}
                 return message
+
         except Exception as e:
             print("some unknown Exception occurred\n")
             message: dict = {"error": "some interanl error occurred // try again"}
@@ -68,12 +69,16 @@ def reset_password_on_database(email: str, new_password: str):
     print("database_conn.py reset_password_on_database() being called\n")
 
     with Session() as session:
+
+        from sqlalchemy import update
+
         user = session.query(User).where(User.user_email == email).first()
         if user is None:
             print("email received was not found on database\n")
             return False
 
-        user.senha_user = new_password
+        consulta = update(User).where(User.user_email == email).values(user_senha=new_password)
+        session.execute(consulta)
 
         try:
             session.commit()
@@ -87,3 +92,6 @@ def reset_password_on_database(email: str, new_password: str):
             print(e)
             message: dict = {"error": "some error have occurred on our server, try to change the password again"}
             return message
+
+
+
