@@ -129,3 +129,25 @@ def write_sessioncode_on_database(session_code: str, email: str):
         return False, message                                                           #sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) SSL connection has been closed unexpectedly
 
 
+def lookfor_sessioncode_on_database(received_sessioncode: str):
+    print("databaase_conn.py lookfor_sessioncode_on_database() being called\n")
+
+    print(received_sessioncode)
+
+    with Session() as session:
+        # colocar um try aq
+        look_sessioncode = session.query(SessionCode).where(SessionCode.sessioncode == received_sessioncode).first()
+        if look_sessioncode is None:
+            print("o sessioncode recebido n tem no database")
+            return False
+
+        print("look_sessioncode -->", look_sessioncode)
+        print("look_sessioncode type -->", type(look_sessioncode))
+        print("look_sessioncode.sessioncode -->", look_sessioncode.sessioncode)
+
+        if look_sessioncode.sessioncode == received_sessioncode:
+            print("o sessioncode recebido corresponde no dtabase\n")
+            return True
+
+
+lookfor_sessioncode_on_database(received_sessioncode="this the session code")
