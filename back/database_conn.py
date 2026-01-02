@@ -106,7 +106,7 @@ def write_sessioncode_on_database(session_code: str, email: str):
             return message
         id_usuario = consulta.user_id
 
-    write_sessioncode = SessionCode(sessioncode=session_code, user_id=1)
+    write_sessioncode = SessionCode(sessioncode=session_code, user_id=id_usuario)
     session.add(write_sessioncode)
 
     import sqlalchemy
@@ -115,16 +115,17 @@ def write_sessioncode_on_database(session_code: str, email: str):
         session.commit()
         print("sessioncode escrito no database\n")
         message: dict = {"response": "sessioncode writtend down on database"}
-        print(message)
         return True, message
     except sqlalchemy.exc.IntegrityError as e:
-        print("acho q esse sessioncode ja existe no dataabase")
+        print("acho q esse sessioncode ja existe no dataabase\n"
+              "Exception abaixo\n")
         print(e)
         message: dict = {"error": "this sessioncode is already written on database"}
         return False, message
     except sqlalchemy.exc.OperationalError as e:
-        print("acho q foi error de conexao com o database")
+        print("acho q foi error de conexao com o database\n")
         print("error -->", e)                                                           #im returning the same error as above to facilitate the handling
         message: dict = {"error": "this sessioncode is already written on database"}    #but this error, i think is like the error on the line right bellow
         return False, message                                                           #sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) SSL connection has been closed unexpectedly
+
 

@@ -35,11 +35,11 @@ class User(Base):
 
 
 class SessionCode(Base):
-    __tablename__ = "tb_sessioncode"
+    __tablename__ = "tb_sessioncodes"
 
     sessioncode_id = Column(Integer, autoincrement=True, nullable=False, primary_key=True)
     user_id = Column(Integer, ForeignKey("tb_users.user_id"), nullable=False)
-    sessioncode = Column(String(255), nullable=False)
+    sessioncode = Column(String(255), nullable=False, unique=True)
     created_at = Column(DateTime, nullable=False, default=str(datetime_.now())[:-7])
     expires_at = Column(DateTime, nullable=False, default=str(datetime_.now()+timedelta(minutes=10))[:-7])
 
