@@ -177,6 +177,20 @@ def resets_password_verify_email(**kwargs):
                 return message
             break
 
+        elif not result_sessioncode[0]:
+            print("result_sessoincode[1] -->", result_sessioncode[1])
+            print("result_sessoincode[1]['error'] -->", result_sessioncode[1]["error"])
+            print("result_sessoincode[1]['error'] type -->", type(result_sessioncode[1]["error"]))
+            if result_sessioncode[1]["error"] == "this sessioncode is already written on database":
+                print('o sessioncode gerado ja existe no database, n sei oq fazer agr')
+                print("acho q tem q gerar outro sessioncode")
+                #return "tem q gerar outro sessioncode"
+                counter += 1
+                print("counter -->", counter)
+                continue
+            #elif result_sessioncode[0]:
+            #    return True
+
 
 
 
