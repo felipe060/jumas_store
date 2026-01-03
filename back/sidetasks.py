@@ -108,3 +108,122 @@ def resets_password(**kwargs):
         message: dict = {"error": "the json received has a number of fields different from 2"}
         return message
 
+    elif len_lista == 2:
+        for item in lista:
+            if item != "email" and item != "new_password":
+                print("j son recebido tem algum campo diferente dos requeridos\n")
+                message: dict = {"error": "the json received has some field different from the required ones"}
+                return message
+        print("o json recebido tem exatamente 2 campos\n")
+
+    email = json_data["email"]
+    new_password = json_data["new_password"]
+
+    from database_conn import reset_password_on_database
+    result_alter_on_database = reset_password_on_database(email=email, new_password=new_password)
+    return result_alter_on_database
+
+
+def resets_password_verify_email(**kwargs):
+    print("sidetasks.py resets_password_verify_email() being called\n")
+
+    json_data = kwargs["json_data"]
+
+    json_data_keys = json_data.keys()
+    lista: list = []
+
+    for item in json_data_keys:
+        lista.append(item)
+
+    len_lista = len(lista)
+
+    if len_lista != 2:
+        print("o jjson recebido tem um numero de campos diferente de 2\n")
+        message: dict = {"error": "the json received has a numebrrr of fields different from 2"}
+        return message
+
+    elif len_lista == 2:
+        for item in lista:
+            if item != "email" and item != "session_id":
+                print("o json tem algum campo diferente dos requeridos\n")
+                message: dict = {"error": "the json received has som field different from the required ones"}
+                return message
+        print("o json recebido tem exatamente 2 campos\n")
+
+    email = json_data["email"]
+    session_id = json_data["session_id"]
+
+    counter = 0
+
+    while counter < 11:
+        codigo = generates_code()
+
+        session_code = str(codigo) + "_" + email + "_" + session_id
+        print("session_code -->", session_code)
+        print("session_code type -->", type(session_code))
+
+        from database_conn import write_sessioncode_on_database
+        result_sessioncode = write_sessioncode_on_database(session_code=session_code, email=email)
+        print("result_sessioncode --> ", result_sessioncode, "\n")
+
+        if result_sessioncode[0]:
+            response_email = sends_email(email_user=email, code=codigo)
+
+            if response_email:
+                message: dict = {"response": "email was sent successfully"}
+                return message
+            elif response_email == False:
+                message: dict = {"error": "some error occurred on oyr sercer, try again"}
+                return message
+            break
+
+
+
+
+
+
+
+
+def generates_code():
+    print("sidetasks.py generates_code() being called\n")
+
+    from random import randint
+    numero = randint(0, 999_999)
+    return numero
+
+
+def sends_email(email_user: str, code: int):
+    print("sidetasks.py sends_email() being called\n")
+
+    import smtplib
+    from email.message import EmailMessage
+
+    email_remetente = "santuario.olinda@gmail.com"
+    senha_remetente = "neln zrec tobo djqn"
+
+    host_smtp = "smtp.gmail.com"
+    porta = 587
+
+    message = EmailMessage()
+    message["Subject"] = "Reseting password"
+    message["From"] = email_remetente
+    message["To"] = email_user
+
+    mensagem = f"""{code}\nthats your code, bro"""
+
+    message.set_content(mensagem)
+
+    try:
+        with smtplib.SMTP(host=host_smtp, port=porta) as server:
+            server.starttls()
+            server.login(email_remetente, senha_remetente)
+            server.send_message(message)
+            print("email sent successfully\n")
+            message: dict = {"success": "email was sent"}
+            return True
+    except Exception as e:
+        print("Deu ruim aq. Exception right bellow\n")
+        print(e)
+        message: dict = {"error": "some internal error have occurred"}
+        return False
+
