@@ -56,3 +56,55 @@ def verifies_user(**kwargs):
         return "unknown exception"
 
 
+def adds_user(**kwargs):
+    print("sidetasks.py adds_user() being called\n")
+    json_data = kwargs["json_data"]
+
+    json_data_keys = json_data.keys()
+    lista: list = []
+
+    for item in json_data_keys:
+        lista.append(item)
+
+    len_lista = len(lista)
+
+    if len_lista != 3:
+        print("o json recebido tem um numero de campos diferente de 3\n")
+        message: dict = {"error": "the json received has a number of fields different from 3"}
+        return message
+
+    elif len_lista == 3:
+        for item in lista:
+            if item != "email" and item != "senha" and item != "name":
+                print("o json recebido tetm algum campo diferente dos requeridos\n")
+                message: dict = {"error": "the json file received has some field different from the required ones"}
+                return message
+        print("o json recebido tem exatamente 2 campos\n")
+
+    email = json_data["email"]
+    senha = json_data["senha"]
+    name = json_data["name"]
+
+    from database_conn import add_to_database
+    result_user_add = add_to_database(email=email, senha=senha, name=name)
+    return result_user_add
+
+
+def resets_password(**kwargs):
+    print("sidetasks.py resets_password() being called\n")
+
+    json_data = kwargs["json_data"]
+
+    json_data_keys = json_data.keys()
+    lista: list = []
+
+    for item in json_data_keys:
+        lista.append(item)
+
+    len_lista = len(lista)
+
+    if len_lista != 2:
+        print("o json recebido tem um numero de campos diferente de 2\n")
+        message: dict = {"error": "the json received has a number of fields different from 2"}
+        return message
+
