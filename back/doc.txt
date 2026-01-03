@@ -68,6 +68,12 @@ dictionary. If some Exception is raised, we return a generic dictionary message 
 this function. I simply dont know what type of error it can generate
 
 
+write_sessioncode_on_database() --> this function takes 2 arguments, "session_code" and "email". Both are strings. Using the Sesion()
+imported from conn.py, the function makes a query on the database. If this query returns None, an error message is returned inside a
+dictionary. If the query happens all alright, the id of the user is taken an put on a variable called "id_usuario". The SessionCode
+class, imported from conn.py, is used to create a new instance. The function tries to commit this sessioncode to the database. If it
+happens, the function returns "True" and a message on a fictionary. I f som error occurs, I hope the exceptions I wrote hold them and
+God bless us all
 
 
 

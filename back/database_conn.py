@@ -138,7 +138,7 @@ def lookfor_sessioncode_on_database(received_sessioncode: str):
         # colocar um try aq
         look_sessioncode = session.query(SessionCode).where(SessionCode.sessioncode == received_sessioncode).first()
         if look_sessioncode is None:
-            print("o sessioncode recebido n tem no database")
+            print("o sessioncode recebido n tem no database\n")
             return False
 
         print("look_sessioncode -->", look_sessioncode)
