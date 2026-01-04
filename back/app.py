@@ -42,5 +42,19 @@ def verify_user():
 
     content_type = str(request.headers["Content-Type"]).lower()
 
-    from sidetask import verify_header
-    
+    from sidetasks import verify_header
+    verify_content_type = verify_header(content_type=content_type)
+
+    if verify_content_type != True:
+        return jsonify(verify_content_type), 400
+
+    else:
+        json_received = request.json        #put the json received on a variable
+
+        from sidetasks import verifies_user                     #importa a funcao la do sidetasks.py
+        result_user = verifies_user(json_data=json_received)    #attaches the result of this function to a variable
+        return jsonify(result_user)                             #tarde te amei, beleza tao antiga e tao nova
+
+
+app.run(host="0.0.0.0", debug=True)
+
