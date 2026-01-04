@@ -253,3 +253,37 @@ def verifies_code_password(**kwargs):
         print("o json recebido tem um numero de campos diferente de 3\n")
         message: dict = {"error": "the json received has a number of fields different from 3"}
         return message
+
+    elif len_lista == 3:
+        for item in lista:
+            if item != "code" and item != "email" and item != "session_id":
+                print("o json recebido tem algum campo diferente dos requeridos\n")
+                message: dict = {"error": "the json received has some field different from the required ones"}
+                return message
+        print("o json recebdio tem exatamente 3 campos")
+
+    code = json_data["code"]
+    email = json_data["email"]
+    session_id = json_data["session_id"]
+    print(code)
+    print(email)
+    print(session_id)
+    print("type code --> ", type(code))
+    print("type email --> ", type(email))
+    print("type session_id --> ", type(session_id))
+
+    session_code = code + "_" + email + "_" + session_id
+    print("session_code dnv --> ", session_code)
+
+    from database_conn import lookfor_sessioncode_on_database
+    result_query = lookfor_sessioncode_on_database(received_sessioncode=session_code)
+
+    if result_query:
+        print("sessioncode correto\n")
+        return True
+    elif not result_query:
+        print("sessioncode errado\n")
+        return False
+    else:
+        print("seila oq aconteceu\n")
+        return False
