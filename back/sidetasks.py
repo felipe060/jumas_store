@@ -192,12 +192,6 @@ def resets_password_verify_email(**kwargs):
             #    return True
 
 
-
-
-
-
-
-
 def generates_code():
     print("sidetasks.py generates_code() being called\n")
 
@@ -241,3 +235,21 @@ def sends_email(email_user: str, code: int):
         message: dict = {"error": "some internal error have occurred"}
         return False
 
+
+def verifies_code_password(**kwargs):
+    print("sidetasks.py verifies_code_password() being called\n")
+
+    json_data = kwargs["json_data"]
+
+    json_data_keys = json_data.keys()
+    lista: list = []
+
+    for item in json_data_keys:
+        lista.append(item)
+
+    len_lista = len(lista)
+
+    if len_lista != 3:
+        print("o json recebido tem um numero de campos diferente de 3\n")
+        message: dict = {"error": "the json received has a number of fields different from 3"}
+        return message
