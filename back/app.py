@@ -56,5 +56,5 @@ def verify_user():
         return jsonify(result_user)                             #tarde te amei, beleza tao antiga e tao nova
 
 
-app.run(host="0.0.0.0", debug=True)
+app.run(host="0.0.0.0", debug=False)
 
