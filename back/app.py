@@ -94,4 +94,4 @@ def send_code_reset_password():
     return "send_email route"
 
 
-app.run(host="0.0.0.0", debug=True)
+app.run(host="0.0.0.0", debug=False)
