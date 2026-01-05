@@ -29,7 +29,7 @@ def require_token(func):            #decorator to make the authentication
 
 @app.route("/", methods=["GET"])        #index route with nothing relevant
 def index():
-    social_media = {"instagram": "felipe.040", "tiktok": "felipica2"}
+    social_media = {"instagram": "felipe.040"}
     return make_response(jsonify(social_media))
 
 
@@ -56,5 +56,25 @@ def verify_user():
         return jsonify(result_user)                             #tarde te amei, beleza tao antiga e tao nova
 
 
-app.run(host="0.0.0.0", debug=False)
+@app.route("/add_user", methods=["POST"])
+@require_token
+def add_user():
+    print("app.py add_user() being called\n")
 
+    content_type = str(request.headers["Content-Type"]).lower()
+
+    from sidetasks import verify_header
+    verify_content_type = verify_header(content_type=content_type)
+
+    if verify_content_type != True:
+        return jsonify(verify_content_type), 400
+
+    else:
+        json_received = request.json
+
+        from sidetasks import adds_user
+        result_user = adds_user(json_data=json_received)
+        return jsonify(result_user)
+
+
+app.run(host="0.0.0.0", debug=False)
