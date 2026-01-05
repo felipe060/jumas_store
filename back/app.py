@@ -94,4 +94,29 @@ def send_code_reset_password():
     return "send_email route"
 
 
-app.run(host="0.0.0.0", debug=False)
+@app.route("/reset_password_verify_email", methods=["POST"])
+@require_token
+def reset_password_verify_email():
+    print("app.py alter_password() being called\n")
+
+    content_type = str(request.headers["Content-Type"]).lower()
+
+    from sidetasks import verify_header
+    verify_content_type = verify_header(content_type=content_type)
+
+    if verify_content_type != True:
+        return jsonify(verify_content_type), 400
+
+    else:
+        json_received = request.json
+        print("app.py alter_password() json_received -->", json_received)
+        print("app.py alter_password() json_received type -->", type(json_received))
+
+        from sidetasks import resets_password_verify_email
+        result_alter_password = resets_password_verify_email(json_data=json_received)
+        print("app.py alter_password() result_alter_password -->", result_alter_password)
+        print("app.py alter_password() result_alter_password type -->", type(result_alter_password))
+        return jsonify(result_alter_password)
+
+
+app.run(host="0.0.0.0", debug=True)

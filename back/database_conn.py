@@ -148,3 +148,6 @@ def lookfor_sessioncode_on_database(received_sessioncode: str):
         if look_sessioncode.sessioncode == received_sessioncode:
             print("o sessioncode recebido corresponde no dtabase\n")
             return True
+
+
+write_sessioncode_on_database(session_code="the session code", email="lipe@hotmail.com")

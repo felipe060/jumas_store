@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5f2bf9ba-ce50-4654-a26c-cb74f463d607" name="Changes" comment="" />
+    <list default="true" id="5f2bf9ba-ce50-4654-a26c-cb74f463d607" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/conn.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/conn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/database_conn.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/database_conn.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -49,7 +54,7 @@
       <recent name="C:\Users\lipe2\Videos\laptop\coding\python\jumas_store\jumas_store\back" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.app">
+  <component name="RunManager" selected="Python.database_conn">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="jumas_store" />
       <option name="ENV_FILES" value="" />
@@ -140,10 +145,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.database_conn" />
         <item itemvalue="Python.app" />
         <item itemvalue="Python.conn" />
         <item itemvalue="Python.sidetasks" />
-        <item itemvalue="Python.database_conn" />
       </list>
     </recent_temporary>
   </component>
