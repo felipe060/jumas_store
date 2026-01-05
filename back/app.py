@@ -10,7 +10,17 @@ load_dotenv(dotenv_path)
 
 def require_token(func):            #decorator to make the authentication
     def wrapper(*args, **kwargs):
-        auth = request.headers["Authorization"]
+        try:
+            auth = request.headers["Authorization"]
+
+        except Exception as e:
+            if str(e) == r"'HTTP_AUTHORIZATION'":
+                message: dict = {"error": "i think you didnt put the authorization field within the headers"}
+                return jsonify(message), 400
+            else:
+                print("else")
+                message: dict = {"error": "something is wrong with the headers you sent"}
+                jsonify(message), 400
 
         if not auth or not auth.startswith("Bearer "):
             message = {"error": "missing token"}
@@ -29,7 +39,7 @@ def require_token(func):            #decorator to make the authentication
 
 @app.route("/", methods=["GET"])        #index route with nothing relevant
 def index():
-    social_media = {"instagram": "felipe.040"}
+    social_media = {"instagram": "felipe.040", "github": "felipe060"}
     return make_response(jsonify(social_media))
 
 
@@ -77,4 +87,11 @@ def add_user():
         return jsonify(result_user)
 
 
-app.run(host="0.0.0.0", debug=False)
+@app.route("/send_code_reset_password")
+@require_token
+def send_code_reset_password():
+    print("app.py send_code_reset_password() being called\n")
+    return "send_email route"
+
+
+app.run(host="0.0.0.0", debug=True)

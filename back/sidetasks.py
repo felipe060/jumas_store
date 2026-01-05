@@ -1,5 +1,6 @@
 def verify_header(**kwargs):
     content_type = kwargs["content_type"]       #recebi o content-type atraves do kwargs com type string
+    print("verify_header content type -->", content_type)
 
     if content_type.strip() == "":                                  #verifies if the content-type is indeed in the request
         message = {"error": "missing //content-type// header"}      #if not, returns a json

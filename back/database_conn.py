@@ -148,6 +148,3 @@ def lookfor_sessioncode_on_database(received_sessioncode: str):
         if look_sessioncode.sessioncode == received_sessioncode:
             print("o sessioncode recebido corresponde no dtabase\n")
             return True
-
-
-lookfor_sessioncode_on_database(received_sessioncode="this the session code")
