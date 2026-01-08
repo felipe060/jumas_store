@@ -1,4 +1,3 @@
-import sqlalchemy.exc
 from conn import Session, User, SessionCode, Address, Product, ProductVariant, Order, OrderItem
 
 
@@ -34,7 +33,7 @@ def add_to_database(email: str, senha: str, name: str):
     print("database_conn.py add_to_database() being called\n")
 
     with Session() as session:
-        import sqlalchemy
+        import sqlalchemy.exc
 
         new_user = User(user_email=email, user_senha=senha, name=name)
         session.add(new_user)
@@ -96,20 +95,20 @@ def reset_password_on_database(email: str, new_password: str):
 
 
 def write_sessioncode_on_database(session_code: str, email: str):
-    print("database_conn.py write_sessioncode_on_database() being called\n")
+    print("\ndatabase_conn.py write_sessioncode_on_database() being called\n")
 
     with Session() as session:
         consulta = session.query(User).where(User.user_email == email).first()
         if consulta is None:
             print("this email isnt written on the database\n")
             message: dict = {"error": "this email isnt on our database"}
-            return message
+            return False, message
         id_usuario = consulta.user_id
 
     write_sessioncode = SessionCode(sessioncode=session_code, user_id=id_usuario)
     session.add(write_sessioncode)
 
-    import sqlalchemy
+    import sqlalchemy.exc
 
     try:
         session.commit()
@@ -130,9 +129,7 @@ def write_sessioncode_on_database(session_code: str, email: str):
 
 
 def lookfor_sessioncode_on_database(received_sessioncode: str):
-    print("databaase_conn.py lookfor_sessioncode_on_database() being called\n")
-
-    print(received_sessioncode)
+    print("\ndatabase_conn.py lookfor_sessioncode_on_database() being called\n")
 
     with Session() as session:
         # colocar um try aq
@@ -141,13 +138,14 @@ def lookfor_sessioncode_on_database(received_sessioncode: str):
             print("o sessioncode recebido n tem no database\n")
             return False
 
-        print("look_sessioncode -->", look_sessioncode)
-        print("look_sessioncode type -->", type(look_sessioncode))
-        print("look_sessioncode.sessioncode -->", look_sessioncode.sessioncode)
-
         if look_sessioncode.sessioncode == received_sessioncode:
-            print("o sessioncode recebido corresponde no dtabase\n")
-            return True
+            print("o sessioncode recebido corresponde no database\n")
+            message: dict = {"response": "the sessioncode received corresponds to the written on database"}
+            return True, message
+        elif look_sessioncode.sessioncode != received_sessioncode:
+            print("o sessioncode recebido n corresponde ao escrito no database\n")
+            message: dict = {"error": "the sessioncode received didnt match on database"}
+            return False, message
 
 
-write_sessioncode_on_database(session_code="the session code", email="lipe@hotmail.com")
+

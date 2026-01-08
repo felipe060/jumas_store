@@ -125,74 +125,6 @@ def resets_password(**kwargs):
     return result_alter_on_database
 
 
-def resets_password_verify_email(**kwargs):
-    print("sidetasks.py resets_password_verify_email() being called\n")
-
-    json_data = kwargs["json_data"]
-
-    json_data_keys = json_data.keys()
-    lista: list = []
-
-    for item in json_data_keys:
-        lista.append(item)
-
-    len_lista = len(lista)
-
-    if len_lista != 2:
-        print("o jjson recebido tem um numero de campos diferente de 2\n")
-        message: dict = {"error": "the json received has a numebrrr of fields different from 2"}
-        return message
-
-    elif len_lista == 2:
-        for item in lista:
-            if item != "email" and item != "session_id":
-                print("o json tem algum campo diferente dos requeridos\n")
-                message: dict = {"error": "the json received has som field different from the required ones"}
-                return message
-        print("o json recebido tem exatamente 2 campos\n")
-
-    email = json_data["email"]
-    session_id = json_data["session_id"]
-
-    counter = 0
-
-    while counter < 11:
-        codigo = generates_code()
-
-        session_code = str(codigo) + "_" + email + "_" + session_id
-        print("session_code -->", session_code)
-        print("session_code type -->", type(session_code))
-
-        from database_conn import write_sessioncode_on_database
-        result_sessioncode = write_sessioncode_on_database(session_code=session_code, email=email)
-        print("result_sessioncode --> ", result_sessioncode, "\n")
-
-        if result_sessioncode[0]:
-            response_email = sends_email(email_user=email, code=codigo)
-
-            if response_email:
-                message: dict = {"response": "email was sent successfully"}
-                return message
-            elif response_email == False:
-                message: dict = {"error": "some error occurred on oyr sercer, try again"}
-                return message
-            break
-
-        elif not result_sessioncode[0]:
-            print("result_sessoincode[1] -->", result_sessioncode[1])
-            print("result_sessoincode[1]['error'] -->", result_sessioncode[1]["error"])
-            print("result_sessoincode[1]['error'] type -->", type(result_sessioncode[1]["error"]))
-            if result_sessioncode[1]["error"] == "this sessioncode is already written on database":
-                print('o sessioncode gerado ja existe no database, n sei oq fazer agr')
-                print("acho q tem q gerar outro sessioncode")
-                #return "tem q gerar outro sessioncode"
-                counter += 1
-                print("counter -->", counter)
-                continue
-            #elif result_sessioncode[0]:
-            #    return True
-
-
 def generates_code():
     print("sidetasks.py generates_code() being called\n")
 
@@ -237,6 +169,78 @@ def sends_email(email_user: str, code: int):
         return False
 
 
+def resets_password_verify_email(**kwargs):
+    print("sidetasks.py resets_password_verify_email() being called\n")
+
+    json_data = kwargs["json_data"]
+
+    json_data_keys = json_data.keys()
+    lista: list = []
+
+    for item in json_data_keys:
+        lista.append(item)
+
+    len_lista = len(lista)
+
+    if len_lista != 2:
+        print("o json recebido tem um numero de campos diferente de 2\n")
+        message: dict = {"error": "the json received has a number of fields different from 2"}
+        return message
+
+    elif len_lista == 2:
+        for item in lista:
+            if item != "email" and item != "session_id":
+                print("o json tem algum campo diferente dos requeridos\n")
+                message: dict = {"error": "the json received has som field different from the required ones"}
+                return message
+        print("o json recebido tem exatamente 2 campos\n")
+
+    email = json_data["email"]
+    session_id = json_data["session_id"]
+
+    counter = 0
+    print("counter --> ", counter)
+
+    while counter < 6:
+        codigo = generates_code()   #gera um numero aleatorio 6 digits from zero till 999_999
+
+        session_code = str(codigo) + "_" + email + "_" + session_id     #cria o sessioncode com codigo, email, session_id
+        print("session_code -->", session_code)
+        print("session_code type -->", type(session_code))
+
+        from database_conn import write_sessioncode_on_database
+        result_sessioncode = write_sessioncode_on_database(session_code=session_code, email=email)  #tenta escrever o sessioncode no database
+        print("result_sessioncode --> ", result_sessioncode, "\n")
+
+        if result_sessioncode[0]:       #caso consiga escrever o sessioncode no database
+            response_email = sends_email(email_user=email, code=codigo)     #try to send an email to the user
+
+            if response_email:                                              #if the email was sent
+                message: dict = {"response": "email was sent successfully"}
+                return message                                              #returns this message
+            elif not response_email:                                                        #if the email wasnt sent
+                message: dict = {"error": "some error occurred on our server, try again"}
+                return message                                                              #returns this message
+            break
+
+        elif not result_sessioncode[0]:     #in case sessioncode isnt written down on database
+            print("result_sessoincode[1] -->", result_sessioncode[1])
+            print("result_sessoincode[1]['error'] -->", result_sessioncode[1]["error"])
+            print("result_sessoincode[1]['error'] type -->", type(result_sessioncode[1]["error"]))
+
+            if result_sessioncode[1]["error"] == "this sessioncode is already written on database":     #if this is the reason
+                print("o sessioncode gerado ja existe no database, estou gerando outro\n")
+                counter += 1                        #adds 1 number to the counter
+                continue                            #continues the code, heading to generate other code and trying to sent another email
+
+            elif result_sessioncode[1]["error"] == "this email isnt on our database":       #if this is the reason
+                print("esse email n ta escrito no database")
+                message: dict = {"response": "this email isnt written on our database"}
+                return message                                                              #returns this message
+            #elif result_sessioncode[0]:
+            #    return True
+
+
 def verifies_code_password(**kwargs):
     print("sidetasks.py verifies_code_password() being called\n")
 
@@ -266,25 +270,12 @@ def verifies_code_password(**kwargs):
     code = json_data["code"]
     email = json_data["email"]
     session_id = json_data["session_id"]
-    print(code)
-    print(email)
-    print(session_id)
-    print("type code --> ", type(code))
-    print("type email --> ", type(email))
-    print("type session_id --> ", type(session_id))
 
     session_code = code + "_" + email + "_" + session_id
-    print("session_code dnv --> ", session_code)
 
     from database_conn import lookfor_sessioncode_on_database
     result_query = lookfor_sessioncode_on_database(received_sessioncode=session_code)
+    return result_query
 
-    if result_query:
-        print("sessioncode correto\n")
-        return True
-    elif not result_query:
-        print("sessioncode errado\n")
-        return False
-    else:
-        print("seila oq aconteceu\n")
-        return False
+
+

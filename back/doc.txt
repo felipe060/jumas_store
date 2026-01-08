@@ -76,9 +76,4 @@ happens, the function returns "True" and a message on a fictionary. I f som erro
 God bless us all
 
 
-
-
-
-
-
-
+lookfor_sessioncode_on_database() -->
