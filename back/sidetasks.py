@@ -360,8 +360,10 @@ def mandar_email(email: str, code):
     resend.api_key = environ.get("RESEND_API_KEY")
 
     r = resend.Emails.send({
-        "from": environ.get("RESEND_EMAIL"),
+        #"from": environ.get("RESEND_EMAIL"),
+        "from": environ.get("RESEND_EMAIL_2"),
         "to": email,
         "subject": "Hello World",
         "html": f"<p>your code --> <strong>{code}</strong></p>"
     })
+    return True
