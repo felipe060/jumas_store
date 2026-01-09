@@ -134,13 +134,19 @@ def generates_code():
 
 
 def sends_email(email_user: str, code: int):
+
     print("sidetasks.py sends_email() being called\n")
+
+    from dotenv import find_dotenv, load_dotenv
+    from os import environ
+    dotenv_path = find_dotenv()
+    load_dotenv(dotenv_path)
 
     import smtplib
     from email.message import EmailMessage
 
     email_remetente = "santuario.olinda@gmail.com"
-    senha_remetente = "neln zrec tobo djqn"
+    senha_remetente = environ.get("GMAIL_APP_PASSWORD")
 
     host_smtp = "smtp.gmail.com"
     porta = 587
