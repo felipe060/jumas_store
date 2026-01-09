@@ -166,7 +166,7 @@ def sends_email(email_user: str, code: int):
         print("Deu ruim aq. Exception right bellow\n")
         print(e)
         message: dict = {"error": "some internal error have occurred"}
-        return False
+        return False, e
 
 
 def resets_password_verify_email(**kwargs):
@@ -215,6 +215,7 @@ def resets_password_verify_email(**kwargs):
                 message: dict = {"response": "email was sent successfully"}
                 return message                                              #returns this message
             elif not response_email:                                                        #if the email wasnt sent
+                print(response_email)
                 message: dict = {"error": "some error occurred on our server, try again"}
                 return message                                                              #returns this message
             break
