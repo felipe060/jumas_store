@@ -113,7 +113,7 @@ def write_sessioncode_on_database(session_code: str, email: str):
     try:
         session.commit()
         print("sessioncode escrito no database\n")
-        message: dict = {"response": "sessioncode writtend down on database"}
+        message: dict = {"response": "sessioncode written down on database"}
         return True, message
     except sqlalchemy.exc.IntegrityError as e:
         print("acho q esse sessioncode ja existe no dataabase\n"

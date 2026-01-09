@@ -48,7 +48,7 @@ def index():
 def verify_user():
     """Route that verifies if the user and password are correct"""
 
-    print("app.py verify_user() being called\n")
+    print("\napp.py verify_user() being called\n")
 
     content_type = str(request.headers["Content-Type"]).lower()
 
@@ -69,7 +69,7 @@ def verify_user():
 @app.route("/add_user", methods=["POST"])
 @require_token
 def add_user():
-    print("app.py add_user() being called\n")
+    print("\napp.py add_user() being called\n")
 
     content_type = str(request.headers["Content-Type"]).lower()
 
@@ -97,7 +97,7 @@ def send_code_reset_password():
 @app.route("/reset_password_verify_email", methods=["POST"])
 @require_token
 def reset_password_verify_email():
-    print("app.py alter_password() being called\n")
+    print("\napp.py alter_password() being called\n")
 
     content_type = str(request.headers["Content-Type"]).lower()
 
