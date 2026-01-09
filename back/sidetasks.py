@@ -134,13 +134,43 @@ def generates_code():
 
 
 def sends_email(email_user: str, code: int):
+    print("\nsidetasks.py sends_email() being called\n")
 
+    from dotenv import find_dotenv, load_dotenv
+    from os import environ
+    import resend
+
+    dotenv_path = find_dotenv()
+    load_dotenv(dotenv_path)
+
+    resend.api_key = environ.get("RESEND_API_KEY")
+    email_remetente = environ.get("RESEND_EMAIL")
+
+    try:
+        r = resend.Emails.send({
+            #"from": environ.get("RESEND_EMAIL"),
+            "from": email_remetente,
+            "to": email_user,
+            "subject": "Hello World",
+            "html": f"<p>your code --> <strong>{code}</strong></p>"
+        })
+        print("email sent successfully\n")
+        message: dict = {"success": "email was sent"}
+        return True
+    except Exception as e:
+        print("Deu ruim aq. Exception right bellow\n")
+        print(e)
+        message: dict = {"error": "some internal error have occurred"}
+        return False, e
+
+
+def sends_email_2(email_user: str, code: int):
     print("sidetasks.py sends_email() being called\n")
 
     from dotenv import find_dotenv, load_dotenv
     from os import environ
     dotenv_path = find_dotenv()
-    load_dotenv(dotenv_path)
+    load_dotenv(dotenv_path)            #original function put aside by now
 
     import smtplib
     from email.message import EmailMessage
@@ -166,13 +196,13 @@ def sends_email(email_user: str, code: int):
             server.login(email_remetente, senha_remetente)
             server.send_message(message)
             print("email sent successfully\n")
-            message: dict = {"success": "email was sent"}
-            return True
+            message: dict = {"response": "email was sent"}
+            return message
     except Exception as e:
         print("Deu ruim aq. Exception right bellow\n")
         print(e)
         message: dict = {"error": "some internal error have occurred"}
-        return False, e
+        return message
 
 
 def resets_password_verify_email(**kwargs):
@@ -349,21 +379,4 @@ def verifies_code_password(**kwargs):
 
 
 
-def mandar_email(email: str, code):
-    import resend
 
-    from dotenv import find_dotenv, load_dotenv
-    from os import environ
-    dotenv_path = find_dotenv()
-    load_dotenv(dotenv_path)
-
-    resend.api_key = environ.get("RESEND_API_KEY")
-
-    r = resend.Emails.send({
-        #"from": environ.get("RESEND_EMAIL"),
-        "from": environ.get("RESEND_EMAIL_2"),
-        "to": email,
-        "subject": "Hello World",
-        "html": f"<p>your code --> <strong>{code}</strong></p>"
-    })
-    return True

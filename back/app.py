@@ -119,12 +119,12 @@ def reset_password_verify_email():
         return jsonify(result_alter_password)
 
 
-@app.route("/emaail", methods=["POST"])
+"""@app.route("/emaail", methods=["POST"])
 def emaail():
     json_received = request.json
-    from sidetasks import mandar_email
-    enviar = mandar_email(email=json_received["email"], code=json_received["code"])
-    return jsonify(enviar)
+    from sidetasks import sends_email
+    enviar = sends_email(email=json_received["email"], code=json_received["code"])
+    return jsonify(enviar)"""
 
 
 app.run(host="0.0.0.0", debug=False)
