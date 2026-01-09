@@ -349,7 +349,7 @@ def verifies_code_password(**kwargs):
 
 
 
-def mandar_email(email, code):
+def mandar_email(email: str, code):
     import resend
 
     from dotenv import find_dotenv, load_dotenv
