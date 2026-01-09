@@ -53,7 +53,7 @@
       <recent name="C:\Users\lipe2\Videos\laptop\coding\python\jumas_store\jumas_store\back" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.app">
+  <component name="RunManager" selected="Python.sidetasks">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="jumas_store" />
       <option name="ENV_FILES" value="" />
@@ -144,8 +144,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.app" />
         <item itemvalue="Python.sidetasks" />
+        <item itemvalue="Python.app" />
         <item itemvalue="Python.database_conn" />
         <item itemvalue="Python.conn" />
       </list>

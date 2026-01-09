@@ -122,8 +122,8 @@ def reset_password_verify_email():
 @app.route("/emaail", methods=["POST"])
 def emaail():
     json_received = request.json
-    from sidetasks import sends_email
-    enviar = sends_email(email_user=json_received["email"], code=json_received["code"])
+    from sidetasks import mandar_email
+    enviar = mandar_email(email=json_received["email"], code=json_received["code"])
     return jsonify(enviar)
 
 

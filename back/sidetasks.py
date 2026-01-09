@@ -349,3 +349,19 @@ def verifies_code_password(**kwargs):
 
 
 
+def mandar_email(email, code):
+    import resend
+
+    from dotenv import find_dotenv, load_dotenv
+    from os import environ
+    dotenv_path = find_dotenv()
+    load_dotenv(dotenv_path)
+
+    resend.api_key = environ.get("RESEND_API_KEY")
+
+    r = resend.Emails.send({
+        "from": environ.get("RESEND_EMAIL"),
+        "to": email,
+        "subject": "Hello World",
+        "html": f"<p>your code --> <strong>{code}</strong></p>"
+    })
