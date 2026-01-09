@@ -119,4 +119,4 @@ def reset_password_verify_email():
         return jsonify(result_alter_password)
 
 
-app.run(host="0.0.0.0", debug=False)
+app.run(host="0.0.0.0", debug=True)
