@@ -146,6 +146,8 @@ def sends_email(email_user: str, code: int):
     resend.api_key = environ.get("RESEND_API_KEY")
     email_remetente = environ.get("RESEND_EMAIL")
 
+    print("email_user --> ", email_user)
+
     try:
         r = resend.Emails.send({
             #"from": environ.get("RESEND_EMAIL"),
