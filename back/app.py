@@ -87,13 +87,6 @@ def add_user():
         return jsonify(result_user)
 
 
-@app.route("/send_code_reset_password")
-@require_token
-def send_code_reset_password():
-    print("app.py send_code_reset_password() being called\n")
-    return "send_email route"
-
-
 @app.route("/reset_password_verify_email", methods=["POST"])
 @require_token
 def reset_password_verify_email():
@@ -109,14 +102,31 @@ def reset_password_verify_email():
 
     else:
         json_received = request.json
-        print("app.py alter_password() json_received -->", json_received)
-        print("app.py alter_password() json_received type -->", type(json_received))
 
         from sidetasks import resets_password_verify_email
         result_alter_password = resets_password_verify_email(json_data=json_received)
-        print("app.py alter_password() result_alter_password -->", result_alter_password)
-        print("app.py alter_password() result_alter_password type -->", type(result_alter_password))
         return jsonify(result_alter_password)
+
+
+@app.route("/reset_password_verify_code", methods=["POST"])
+@require_token
+def reset_password_verify_code():
+    print("\napp.py reset_password_verify_code() being called\n")
+
+    content_type = str(request.headers["Content-Type"]).lower()
+
+    from sidetasks import verify_header
+    verify_content_type = verify_header(content_type=content_type)
+
+    if verify_content_type != True:
+        return jsonify(verify_content_type), 400
+
+    else:
+        json_received = request.json
+
+        from sidetasks import resets_password_verify_code
+        result_verify_code = resets_password_verify_code(json_data=json_received)
+        return jsonify(result_verify_code), 200
 
 
 @app.route("/emaail", methods=["POST"])

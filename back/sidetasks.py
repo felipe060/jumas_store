@@ -174,7 +174,7 @@ def resets_password_verify_email(**kwargs):
     counter = 0                     #define the counter to the while loop
     print("counter --> ", counter)
 
-    while counter < 6:
+    while counter < 10:
         codigo = generates_code()   #gera um numero aleatorio 6 digits from zero till 999_999
 
         session_code = str(codigo) + "_" + email        #cria o sessioncode com codigo + emai
@@ -207,7 +207,7 @@ def resets_password_verify_email(**kwargs):
                 return message                                                              #returns this message
 
 
-def verifies_code_password(**kwargs):
+def resets_password_verify_code(**kwargs):
     """Verifies if the code received mathces with the code on database"""
     print("\nsidetasks.py verifies_code_password() being called\n")     #needs 2 fields --> code / email
 
@@ -216,7 +216,7 @@ def verifies_code_password(**kwargs):
 
     if len(json_data_keys) != 2:                #if the json received has something differente from 2 fields
         print("o json recebido tem um numero de campos diferente de 2\n")
-        message: dict = {"error": "the json received has a number of fields different from 3"}
+        message: dict = {"error": "the json received has a number of fields different from 2"}
         return message          #the function returns this message
 
     elif len(json_data_keys) == 2:      #if we receive exactly 2 fields
