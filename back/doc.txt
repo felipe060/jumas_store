@@ -77,3 +77,17 @@ God bless us all
 
 
 lookfor_sessioncode_on_database() -->
+
+
+
+
+sidetasks.py _______________________________________
+
+all functions of this module return a dictionary response like
+{"error": "some message"}
+or
+{"response": "some message"}
+
+
+verifies_user() --> the response shall be one the these bellow
+{"error": "email received was not found on database"}

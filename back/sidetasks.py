@@ -1,40 +1,35 @@
 def verify_header(**kwargs):
-    content_type = kwargs["content_type"]       #recebi o content-type atraves do kwargs com type string
-    print("verify_header content type -->", content_type)
+    """Verifies if the Content-Type is application/json"""
+    print("\nsidetasks.py verify_header() being called\n")
 
-    if content_type.strip() == "":                                  #verifies if the content-type is indeed in the request
-        message = {"error": "missing //content-type// header"}      #if not, returns a json
+    content_type = kwargs["content_type"]       #recebi o content-type atraves do kwargs com type string
+
+    if content_type == "application/json":
+        return True
+
+    elif content_type.strip() == "":                                  #verifies if the content-type is indeed in the request
+        message = {"error": "missing //content-type// header"}        #if not, returns a json
         return message
 
     elif content_type != "application/json":                                    #verifies if the header id content-type=application/json
-        message = {"error": "//content-type// must be application/json"}        #if not, return a json
+        message = {"error": "//content-type// must be application/json"}        #if not, returns a json
         return message
-
-    elif content_type == "application/json":
-        return True
 
 
 def verifies_user(**kwargs):
     """Verifies if the user and password are correct"""
-
-    print("sidetasks.py verifies_user() being called\n")
+    print("\nsidetasks.py verifies_user() being called\n")
 
     json_data = kwargs["json_data"]             #receives the json from the app.py and put it into a variable
-
     json_data_keys = json_data.keys()           #put the json keys on a variable
-    lista: list = []
-    for item in json_data_keys:                 #put the keys on a list
-        lista.append(item)
 
-    len_lista = len(lista)                      #checks the length of the list with json keys
-
-    if len_lista != 2:                                                          #if the list has something different from 2 items, its over pro betinha
-        print("o json recebido tem um numero de campos diferente de 2\n")       #eu so preciso de 2 itens //email// e //senha//
+    if len(json_data_keys) != 2:                                                          #if the list has something different from 2 items, its over pro betinha
+        print("o json recebido tem um numero de campos diferente de 2\n")        #eu so preciso de 2 itens //email// e //senha//
         message: dict = {"error": "the json file received has a number of fields different from 2"}
         return message
 
-    elif len_lista == 2:            #if the json received has exactly 2 items
-        for item in lista:
+    elif len(json_data_keys) == 2:            #if the json received has exactly 2 items
+        for item in json_data_keys:
             if item != "email" and item != "senha":                                     #we check if these items are //email// and //senha//
                 print("o json tem algum campo diferente dos campos requeridos")         #if not, it1s over pro betinha again
                 message: dict = {"error": "the json file received has some field different from the required ones"}
@@ -54,7 +49,8 @@ def verifies_user(**kwargs):
         print("eita, surgiu uma Exception\n"
               "-- love the Lord your God with all your heart and with all you soul and with all your mind")
         print(e)
-        return "unknown exception"
+        message: dict = {"error": f"{e}"}
+        return message
 
 
 def adds_user(**kwargs):

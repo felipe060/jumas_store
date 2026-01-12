@@ -122,4 +122,5 @@ class OrderItem(Base):
     id_variant = relationship("ProductVariant", back_populates="id_variant")
 
 
-Base.metadata.create_all(engine)
+if __name__ == "__main__":
+    Base.metadata.create_all(engine)

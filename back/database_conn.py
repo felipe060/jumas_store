@@ -3,7 +3,6 @@ from conn import Session, User, SessionCode, Address, Product, ProductVariant, O
 
 def verify_on_database(email: str, senha: str):
     """Verifies if the user and password are correct by connecting to the database"""
-
     print("database_conn.py verify_on_database() being called\n")
 
     with Session() as session:
@@ -11,22 +10,26 @@ def verify_on_database(email: str, senha: str):
             consulta = session.query(User.user_email, User.user_senha).where(User.user_email == email).first()
             if consulta is None:
                 print("email received was not found on database\n")
-                return False
+                message: dict = {"error": "email received was not found on database"}
+                return message
         except Exception as e:
             print("houve uma exception inesperada\n"
                   "exception right bellow\n")
             print(e)
-            return False
+            message: dict = {"error": f"{e}"}
+            return message
 
     email_on_database = consulta.user_email
     senha_on_database = consulta.user_senha
 
     if email == email_on_database and senha == senha_on_database:
         print("email e senha iguais aos do database\n")
-        return True
+        message: dict = {"response": "email and senha match with those in the database"}
+        return message
     elif email != email_on_database or senha != senha_on_database:
         print("email ou senha diferente do cadastrado no database\n")
-        return False
+        message: dict = {"error": "email or senha different from the ones in the database"}
+        return message
 
 
 def add_to_database(email: str, senha: str, name: str):
