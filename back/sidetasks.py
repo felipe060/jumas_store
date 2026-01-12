@@ -234,8 +234,6 @@ def verifies_code_password(**kwargs):
 
     from database_conn import lookfor_sessioncode_on_database
     result_query = lookfor_sessioncode_on_database(received_sessioncode=session_code)
-    return result_query
-
-
-
+    print("seila result_query() --> ", result_query)
+    return result_query[1]
 
