@@ -34,7 +34,6 @@ def verifies_user(**kwargs):
                 print("o json tem algum campo diferente dos campos requeridos\n")         #if not, it1s over pro betinha again
                 message: dict = {"error": "the json file received has some field different from the required ones"}
                 return message
-
         print("o json recebido tem exatamente 2 campos\n")
 
     email = json_data["email"]
@@ -45,7 +44,7 @@ def verifies_user(**kwargs):
         result_user_query = verify_on_database(email=email, senha=senha)
         return result_user_query
 
-    except Exception as e:          #i dont know what to do when an exception is raised
+    except Exception as e:          #i dont know what to do when an exception is raised here
         print("eita, surgiu uma Exception\n"
               "-- love the Lord your God with all your heart and with all you soul and with all your mind")
         print(e)
@@ -68,10 +67,10 @@ def adds_user(**kwargs):
     elif len(json_data_keys) == 3:
         for item in json_data_keys:
             if item != "email" and item != "senha" and item != "name":
-                print("o json recebido tetm algum campo diferente dos requeridos\n")
+                print("o json recebido tem algum campo diferente dos requeridos\n")
                 message: dict = {"error": "the json file received has some field different from the required ones"}
                 return message
-        print("o json recebido tem exatamente 2 campos\n")
+        print("o json recebido tem exatamente 3 campos\n")
 
     email = json_data["email"]
     senha = json_data["senha"]
