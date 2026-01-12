@@ -33,7 +33,7 @@ def verify_on_database(email: str, senha: str):
 
 
 def add_to_database(email: str, senha: str, name: str):
-    print("database_conn.py add_to_database() being called\n")
+    print("\ndatabase_conn.py add_to_database() being called\n")
 
     with Session() as session:
         import sqlalchemy.exc
@@ -63,8 +63,10 @@ def add_to_database(email: str, senha: str, name: str):
                 return message
 
         except Exception as e:
-            print("some unknown Exception occurred\n")
-            message: dict = {"error": "some interanl error occurred // try again"}
+            print("some unknown Exception occurred\n"
+                  "Exception bellow"
+                  f"{e}\n")
+            message: dict = {"error": f"{e}"}
             return message
 
 
