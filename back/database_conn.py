@@ -140,7 +140,6 @@ def write_sessioncode_on_database(session_code: str, email: str):
 def write_sessioncode_on_database_2(session_code: str):
     print("\ndatabase_conn.py write_sessioncode_on_database() being called\n")
 
-    print("seila sessioncode --> ", session_code)
     session = Session()
     write_sessioncode = SessionCode(sessioncode=session_code)
     session.add(write_sessioncode)
