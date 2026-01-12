@@ -49,6 +49,7 @@ def verify_user():
     """Route that verifies if the user and password are correct"""
 
     print("\napp.py verify_user() being called\n")
+    #receives --> email / senha
 
     content_type = str(request.headers["Content-Type"]).lower()
 
@@ -70,6 +71,7 @@ def verify_user():
 @require_token
 def add_user():
     print("\napp.py add_user() being called\n")
+    #receives --> email / senha / name
 
     content_type = str(request.headers["Content-Type"]).lower()
 
@@ -91,6 +93,7 @@ def add_user():
 @require_token
 def reset_password_verify_email():
     print("\napp.py alter_password() being called\n")
+    #receives --> email
 
     content_type = str(request.headers["Content-Type"]).lower()
 
@@ -112,6 +115,7 @@ def reset_password_verify_email():
 @require_token
 def reset_password_verify_code():
     print("\napp.py reset_password_verify_code() being called\n")
+    #receives --> email / code
 
     content_type = str(request.headers["Content-Type"]).lower()
 

@@ -24,11 +24,13 @@ def verify_on_database(email: str, senha: str):
 
     if email == email_on_database and senha == senha_on_database:
         print("email e senha iguais aos do database\n")
-        message: dict = {"response": "email and senha match with those in the database"}
+        #message: dict = {"response": "email and senha match with those in the database"}
+        message: dict = {"response": True}
         return message
     elif email != email_on_database or senha != senha_on_database:
         print("email ou senha diferente do cadastrado no database\n")
-        message: dict = {"error": "email or senha different from the ones in the database"}
+        #message: dict = {"error": "email or senha different from the ones in the database"}
+        message: dict = {"response": False}
         return message
 
 
@@ -45,7 +47,8 @@ def add_to_database(email: str, senha: str, name: str):
         try:
             session.commit()                        #and try to commit him
             print("user cadastrado c sucesso\n")
-            message: dict = {"response": "user added successfully"}
+            #message: dict = {"response": "user added successfully"}
+            message: dict = {"response": True}
             return message      #returns this message if everything goes all alright
 
         except sqlalchemy.exc.IntegrityError as e:      #if this Exception is raised
@@ -88,7 +91,8 @@ def reset_password_on_database(email: str, new_password: str):
         try:
             session.commit()                    #and try to commit it
             print("senha alterada c sucesso\n")
-            message: dict = {"response": "password changed successfully"}   #if it is successful
+            #message: dict = {"response": "password changed successfully"}   #if it is successful
+            message: dict = {"response": True}   #if it is successful
             return message                                                  #the function returns this message
 
         except Exception as e:                      #if some Exception is raised
@@ -137,8 +141,6 @@ def lookfor_sessioncode_on_database(received_sessioncode: str):
     print("\ndatabase_conn.py lookfor_sessioncode_on_database() being called\n")    #need just 1 argumento --> received_sessioncode
 
     with Session() as session:      #Session imported from conn.py
-
-        # colocar um try aq
         try:
             look_sessioncode = session.query(SessionCode).where(SessionCode.sessioncode == received_sessioncode).first()
         except Exception as e:
@@ -151,13 +153,16 @@ def lookfor_sessioncode_on_database(received_sessioncode: str):
         if look_sessioncode is None:
             print("o sessioncode recebido n tem no database\n")
             message: dict = {"error": "the sessioncode received dont exist in the database"}
+            #message: dict = {"response": False}
             return False, message
 
         if look_sessioncode.sessioncode == received_sessioncode:
             print("o sessioncode recebido corresponde no database\n")
-            message: dict = {"response": "the sessioncode received corresponds to the written on database"}
+            #message: dict = {"response": "the sessioncode received corresponds to the written on database"}
+            message: dict = {"response": True}
             return True, message
         elif look_sessioncode.sessioncode != received_sessioncode:
             print("o sessioncode recebido n corresponde ao escrito no database\n")
             message: dict = {"error": "the sessioncode received didnt match on database"}
+            #message: dict = {"error": False}
             return False, message

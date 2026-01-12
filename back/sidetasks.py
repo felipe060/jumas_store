@@ -12,7 +12,7 @@ def verify_header(**kwargs):
         return message
 
     elif content_type != "application/json":                                    #verifies if the header id content-type=application/json
-        message = {"error": "//content-type// must be application/json"}        #if not, returns a json
+        message = {"error": "//content-type// wrong"}        #if not, returns a json
         return message
 
 
@@ -54,7 +54,7 @@ def verifies_user(**kwargs):
 
 def adds_user(**kwargs):
     """Tries to add a new user to the database"""
-    print("sidetasks.py adds_user() being called\n")
+    print("\nsidetasks.py adds_user() being called\n")
 
     json_data = kwargs["json_data"]         #i need 3 fields //email// and //senha// and //name//
     json_data_keys = json_data.keys()
@@ -96,7 +96,7 @@ def resets_password(**kwargs):
     elif len(json_data_keys) == 2:      #if we receive exactly 2 fields
         for item in json_data_keys:
             if item != "email" and item != "new_password":      #we check if they are the required ones
-                print("j son recebido tem algum campo diferente dos requeridos\n")
+                print("json recebido tem algum campo diferente dos requeridos\n")
                 message: dict = {"error": "the json received has some field different from the required ones"}
                 return message                                  #if not, we return this message
         print("o json recebido tem exatamente 2 campos\n")
@@ -186,7 +186,8 @@ def resets_password_verify_email(**kwargs):
             response_email = sends_email(email_user=email, code=codigo)     #try to send an email to the user
 
             if response_email:                                              #if the email was sent
-                message: dict = {"response": "email was sent successfully"}
+                #message: dict = {"response": "email was sent successfully"}
+                message: dict = {"response": True}
                 return message                                              #returns this message
             elif not response_email:                                                        #if the email wasnt sent
                 print("response_email --> ", response_email)
