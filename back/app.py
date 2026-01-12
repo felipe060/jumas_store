@@ -156,4 +156,4 @@ def reset_password_verify_code():
         return jsonify(result_verify_code), 200
 
 
-app.run(host="0.0.0.0", debug=True)
+app.run(host="0.0.0.0", debug=False)
