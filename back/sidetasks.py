@@ -31,11 +31,11 @@ def verifies_user(**kwargs):
     elif len(json_data_keys) == 2:            #if the json received has exactly 2 items
         for item in json_data_keys:
             if item != "email" and item != "senha":                                     #we check if these items are //email// and //senha//
-                print("o json tem algum campo diferente dos campos requeridos")         #if not, it1s over pro betinha again
+                print("o json tem algum campo diferente dos campos requeridos\n")         #if not, it1s over pro betinha again
                 message: dict = {"error": "the json file received has some field different from the required ones"}
                 return message
 
-        print("o json recebido tem exatamente 2 campos")
+        print("o json recebido tem exatamente 2 campos\n")
 
     email = json_data["email"]
     senha = json_data["senha"]
@@ -45,7 +45,7 @@ def verifies_user(**kwargs):
         result_user_query = verify_on_database(email=email, senha=senha)
         return result_user_query
 
-    except Exception as e:
+    except Exception as e:          #i dont know what to do when an exception is raised
         print("eita, surgiu uma Exception\n"
               "-- love the Lord your God with all your heart and with all you soul and with all your mind")
         print(e)
@@ -54,24 +54,19 @@ def verifies_user(**kwargs):
 
 
 def adds_user(**kwargs):
+    """Tries to add a new user to the database"""
     print("sidetasks.py adds_user() being called\n")
+
     json_data = kwargs["json_data"]
-
     json_data_keys = json_data.keys()
-    lista: list = []
 
-    for item in json_data_keys:
-        lista.append(item)
-
-    len_lista = len(lista)
-
-    if len_lista != 3:
+    if len(json_data_keys) != 3:
         print("o json recebido tem um numero de campos diferente de 3\n")
         message: dict = {"error": "the json received has a number of fields different from 3"}
         return message
 
-    elif len_lista == 3:
-        for item in lista:
+    elif len(json_data_keys) == 3:
+        for item in json_data_keys:
             if item != "email" and item != "senha" and item != "name":
                 print("o json recebido tetm algum campo diferente dos requeridos\n")
                 message: dict = {"error": "the json file received has some field different from the required ones"}
