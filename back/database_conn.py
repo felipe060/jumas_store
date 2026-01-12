@@ -134,11 +134,12 @@ def write_sessioncode_on_database(session_code: str, email: str):
 
 
 def lookfor_sessioncode_on_database(received_sessioncode: str):
-    print("\ndatabase_conn.py lookfor_sessioncode_on_database() being called\n")
+    print("\ndatabase_conn.py lookfor_sessioncode_on_database() being called\n")    #need just 1 argumento --> received_sessioncode
 
-    with Session() as session:
-        # colocar um try aq
+    with Session() as session:      #Session imported from conn.py
         look_sessioncode = session.query(SessionCode).where(SessionCode.sessioncode == received_sessioncode).first()
+
+        # colocar um try aq
         if look_sessioncode is None:
             print("o sessioncode recebido n tem no database\n")
             return False
@@ -151,6 +152,7 @@ def lookfor_sessioncode_on_database(received_sessioncode: str):
             print("o sessioncode recebido n corresponde ao escrito no database\n")
             message: dict = {"error": "the sessioncode received didnt match on database"}
             return False, message
+
 
 
 

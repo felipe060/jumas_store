@@ -143,84 +143,35 @@ def sends_email(email_user: str, code: int):
         })
         print("email sent successfully\n")
         message: dict = {"success": "email was sent"}   #if the email is sent
-        return message          #the function returns this message
+        return True          #the function returns True
     except Exception as e:
         print("Deu ruim aq. Exception right bellow\n")  #if some Exception is raised
         print(e)
         message: dict = {"error": f"{e}"}
-        return message      #return this message
-
-
-def sends_email_2(email_user: str, code: int):
-    print("sidetasks.py sends_email() being called\n")
-
-    from dotenv import find_dotenv, load_dotenv
-    from os import environ
-    dotenv_path = find_dotenv()
-    load_dotenv(dotenv_path)            #original function put aside by now
-
-    import smtplib
-    from email.message import EmailMessage
-
-    email_remetente = "santuario.olinda@gmail.com"
-    senha_remetente = environ.get("GMAIL_APP_PASSWORD")
-
-    host_smtp = "smtp.gmail.com"
-    porta = 587
-
-    message = EmailMessage()
-    message["Subject"] = "Reseting password"
-    message["From"] = email_remetente
-    message["To"] = email_user
-
-    mensagem = f"""{code}\nthats your code, bro"""
-
-    message.set_content(mensagem)
-
-    try:
-        with smtplib.SMTP(host=host_smtp, port=porta) as server:
-            server.starttls()
-            server.login(email_remetente, senha_remetente)
-            server.send_message(message)
-            print("email sent successfully\n")
-            message: dict = {"response": "email was sent"}
-            return message
-    except Exception as e:
-        print("Deu ruim aq. Exception right bellow\n")
-        print(e)
-        message: dict = {"error": "some internal error have occurred"}
-        return message
+        return False      #return False
 
 
 def resets_password_verify_email(**kwargs):
     print("\nsidetasks.py resets_password_verify_email() being called\n")
 
     json_data = kwargs["json_data"]         #this function receives 1 argument --> email
-
     json_data_keys = json_data.keys()
-    lista: list = []
 
-    for item in json_data_keys:
-        lista.append(item)
-
-    len_lista = len(lista)
-
-    if len_lista != 1:
+    if len(json_data_keys) != 1:                #if the function receives something differente from 1 argument
         print("o json recebido tem um numero de campos diferente de 1\n")
         message: dict = {"error": "the json received has a number of fields different from 1"}
-        return message
+        return message          #returns this message
 
-    elif len_lista == 1:
-        for item in lista:
+    elif len(json_data_keys) == 1:          #if the function receives 1 argumento
+        for item in json_data_keys:         #we check if it is //email//
             if item != "email":
                 print("o campo recebido no json é diferente do campo requerido\n")
-                message: dict = {"error": "the json received has som field different from the required one"}
-                return message
+                message: dict = {"error": "the json received has a field different from the required one"}
+                return message              #if not, return this message
         print("o json recebido tem exatamente 1 campo\n")
 
-    email = json_data["email"]
-
-    counter = 0
+    email = json_data["email"]      #put the email received on a variable
+    counter = 0                     #define the counter to the while loop
     print("counter --> ", counter)
 
     while counter < 6:
@@ -238,127 +189,48 @@ def resets_password_verify_email(**kwargs):
                 message: dict = {"response": "email was sent successfully"}
                 return message                                              #returns this message
             elif not response_email:                                                        #if the email wasnt sent
-                print(response_email)
+                print("response_email --> ", response_email)
                 message: dict = {"error": "some error occurred on our server, try again"}
                 return message                                                              #returns this message
-            break
+            break               #and stops the loop
 
         elif not result_sessioncode[0]:     #in case sessioncode isnt written down on database
 
             if result_sessioncode[1]["error"] == "this sessioncode is already written on database":     #if this is the reason
                 print("o sessioncode gerado ja existe no database, estou gerando outro\n")
                 counter += 1                        #adds 1 number to the counter
-                continue                            #continues the code, heading to generate other code and trying to sent another email
+                continue                            #continues the loop, heading to generate other code and trying to send another email
 
             elif result_sessioncode[1]["error"] == "this email isnt on our database":       #if this is the reason
-                print("esse email n ta escrito no database")
+                print("esse email n ta escrito no database\n")
                 message: dict = {"response": "this email isnt written on our database"}
                 return message                                                              #returns this message
-
-
-def resets_password_verify_email_2(**kwargs):
-    print("sidetasks.py resets_password_verify_email() being called\n")
-
-    json_data = kwargs["json_data"]         #raw primordial function that wont be user for now
-
-    json_data_keys = json_data.keys()
-    lista: list = []
-
-    for item in json_data_keys:
-        lista.append(item)
-
-    len_lista = len(lista)
-
-    if len_lista != 2:
-        print("o json recebido tem um numero de campos diferente de 2\n")
-        message: dict = {"error": "the json received has a number of fields different from 2"}
-        return message
-
-    elif len_lista == 2:
-        for item in lista:
-            if item != "email" and item != "session_id":
-                print("o json tem algum campo diferente dos requeridos\n")
-                message: dict = {"error": "the json received has som field different from the required ones"}
-                return message
-        print("o json recebido tem exatamente 2 campos\n")
-
-    email = json_data["email"]
-    session_id = json_data["session_id"]
-
-    counter = 0
-    print("counter --> ", counter)
-
-    while counter < 6:
-        codigo = generates_code()   #gera um numero aleatorio 6 digits from zero till 999_999
-
-        session_code = str(codigo) + "_" + email + "_" + session_id     #cria o sessioncode com codigo, email, session_id
-        print("session_code -->", session_code)
-        print("session_code type -->", type(session_code))
-
-        from database_conn import write_sessioncode_on_database
-        result_sessioncode = write_sessioncode_on_database(session_code=session_code, email=email)  #tenta escrever o sessioncode no database
-        print("result_sessioncode --> ", result_sessioncode, "\n")
-
-        if result_sessioncode[0]:       #caso consiga escrever o sessioncode no database
-            response_email = sends_email(email_user=email, code=codigo)     #try to send an email to the user
-
-            if response_email:                                              #if the email was sent
-                message: dict = {"response": "email was sent successfully"}
-                return message                                              #returns this message
-            elif not response_email:                                                        #if the email wasnt sent
-                message: dict = {"error": "some error occurred on our server, try again"}
-                return message                                                              #returns this message
-            break
-
-        elif not result_sessioncode[0]:     #in case sessioncode isnt written down on database
-            print("result_sessoincode[1] -->", result_sessioncode[1])
-            print("result_sessoincode[1]['error'] -->", result_sessioncode[1]["error"])
-            print("result_sessoincode[1]['error'] type -->", type(result_sessioncode[1]["error"]))
-
-            if result_sessioncode[1]["error"] == "this sessioncode is already written on database":     #if this is the reason
-                print("o sessioncode gerado ja existe no database, estou gerando outro\n")
-                counter += 1                        #adds 1 number to the counter
-                continue                            #continues the code, heading to generate other code and trying to sent another email
-
-            elif result_sessioncode[1]["error"] == "this email isnt on our database":       #if this is the reason
-                print("esse email n ta escrito no database")
-                message: dict = {"response": "this email isnt written on our database"}
-                return message                                                              #returns this message
-            #elif result_sessioncode[0]:
-            #    return True
 
 
 def verifies_code_password(**kwargs):
-    print("sidetasks.py verifies_code_password() being called\n")
+    """Verifies if the code received mathces with the code on database"""
+    print("\nsidetasks.py verifies_code_password() being called\n")     #needs 2 fields --> code / email
 
-    json_data = kwargs["json_data"]
+    json_data = kwargs["json_data"]         #just defining json_data
+    json_data_keys = json_data.keys()       #putting the keys on a variable
 
-    json_data_keys = json_data.keys()
-    lista: list = []
-
-    for item in json_data_keys:
-        lista.append(item)
-
-    len_lista = len(lista)
-
-    if len_lista != 3:
-        print("o json recebido tem um numero de campos diferente de 3\n")
+    if len(json_data_keys) != 2:                #if the json received has something differente from 2 fields
+        print("o json recebido tem um numero de campos diferente de 2\n")
         message: dict = {"error": "the json received has a number of fields different from 3"}
-        return message
+        return message          #the function returns this message
 
-    elif len_lista == 3:
-        for item in lista:
-            if item != "code" and item != "email" and item != "session_id":
+    elif len(json_data_keys) == 2:      #if we receive exactly 2 fields
+        for item in json_data_keys:
+            if item != "code" and item != "email":      #verify if they are the fields we want
                 print("o json recebido tem algum campo diferente dos requeridos\n")
                 message: dict = {"error": "the json received has some field different from the required ones"}
-                return message
-        print("o json recebdio tem exatamente 3 campos")
+                return message                              #if not, return this message
+        print("o json recebdio tem exatamente 2 campos")
 
-    code = json_data["code"]
+    code = json_data["code"]        #just defining the variables
     email = json_data["email"]
-    session_id = json_data["session_id"]
 
-    session_code = code + "_" + email + "_" + session_id
+    session_code = str(code) + "_" + email       #making the sessioncode to verify
 
     from database_conn import lookfor_sessioncode_on_database
     result_query = lookfor_sessioncode_on_database(received_sessioncode=session_code)
