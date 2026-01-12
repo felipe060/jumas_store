@@ -132,8 +132,6 @@ def sends_email(email_user: str, code: int):
     resend.api_key = environ.get("RESEND_API_KEY")
     email_remetente = environ.get("RESEND_EMAIL")
 
-    print("email_user --> ", email_user)
-
     try:
         r = resend.Emails.send({            #trynna send the email
             "from": email_remetente,
@@ -149,6 +147,38 @@ def sends_email(email_user: str, code: int):
         print(e)
         message: dict = {"error": f"{e}"}
         return False      #return False
+
+
+def sends_sms(number: str, code: int):
+    """Tries to send a code via sms to the user"""
+    print("\nsidetasks.py sends_sms() being called")
+
+    from dotenv import find_dotenv, load_dotenv
+    from os import getenv, environ
+    from twilio.rest import Client
+
+    dotenv_path = find_dotenv()
+    load_dotenv(dotenv_path)
+
+    account_sid = environ.get("TWILIO_ACCOUNT_SID")
+    auth_token = environ.get("TWILIO_AUTH_TOKEN")
+    number_remetente = environ.get("TWILIO_NUMBER_REMETENTE")
+    number_user = number
+    client = Client(account_sid, auth_token)
+
+    try:
+        message = client.messages.create(
+            body=f"your code --> {code}",
+            from_=number_remetente,
+            to=number_user
+            #to="+55" + number_user
+        )
+        print("sms sent successfully\n")
+        return True
+    except Exception as e:
+        print("deu ruim. Execption bellow\n"
+              f"{e}")
+        return False
 
 
 def resets_password_verify_email(**kwargs):
@@ -206,6 +236,57 @@ def resets_password_verify_email(**kwargs):
                 print("esse email n ta escrito no database\n")
                 message: dict = {"response": "this email isnt written on our database"}
                 return message                                                              #returns this message
+
+
+def resets_password_verify_number(**kwargs):
+    print("\nsidetasks.py resets_password_verify_number() being called\n")
+
+    json_data = kwargs["json_data"]     #this function receives 1 argument --> number
+    json_data_keys = json_data.keys()
+
+    if len(json_data_keys) != 1:                #if the function receives something differente from 1 argument
+        print("o json recebido tem um numero de campos diferente de 1\n")
+        message: dict = {"error": "the json received has a number of fields different from 1"}
+        return message          #returns this message
+
+    elif len(json_data_keys) == 1:          #if the function receives 1 argumento
+        for item in json_data_keys:         #we check if it is //email//
+            if item != "number":
+                print("o campo recebido no json é diferente do campo requerido\n")
+                message: dict = {"error": "the json received has a field different from the required one"}
+                return message              #if not, return this message
+        print("o json recebido tem exatamente 1 campo\n")
+
+    number = json_data["number"]    #put the number received on a variable
+    counter = 0                     #define the counter to the while loop
+    print("counter --> ", counter)
+
+    while counter < 10:
+        codigo = generates_code()   #gera um numero aleatorio 6 digits from zero till 999_999
+        session_code = str(codigo) + "_" + number       #cria o sessioncode codigo + number
+
+        from database_conn import write_sessioncode_on_database_2
+        result_sessioncode = write_sessioncode_on_database_2(session_code=session_code)  #tenta escrever o sessioncode no database
+
+        if result_sessioncode[0]:       #caso consiga escrever o sessioncode no database
+            response_sms = sends_sms(number=number, code=codigo)     #try to send an sms to the user
+
+            if response_sms:                                              #if the sms was sent
+                #message: dict = {"response": "sms was sent successfully"}
+                message: dict = {"response": True}
+                return message                                              #returns this message
+            elif not response_sms:                                                        #if the sms wasnt sent
+                print("response_sms --> ", response_sms)
+                message: dict = {"error": "some error occurred on our server, try again"}
+                return message                                                              #returns this message
+            break               #and stops the loop
+
+        elif not result_sessioncode[0]:     #in case sessioncode isnt written down on database
+
+            if result_sessioncode[1]["error"] == "this sessioncode is already written on database":     #if this is the reason
+                print("o sessioncode gerado ja existe no database, estou gerando outro\n")
+                counter += 1                        #adds 1 number to the counter
+                continue                            #continues the loop, heading to generate other code and trying to send another sms
 
 
 def resets_password_verify_code(**kwargs):

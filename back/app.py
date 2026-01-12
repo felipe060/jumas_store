@@ -94,6 +94,7 @@ def add_user():
 def reset_password_verify_email():
     print("\napp.py alter_password() being called\n")
     #receives --> email
+    #receives --> email / method   |   number / method
 
     content_type = str(request.headers["Content-Type"]).lower()
 
@@ -108,6 +109,28 @@ def reset_password_verify_email():
 
         from sidetasks import resets_password_verify_email
         result_alter_password = resets_password_verify_email(json_data=json_received)
+        return jsonify(result_alter_password)
+
+
+@app.route("/reset_password_verify_number", methods=["POST"])
+@require_token
+def reset_password_verify_number():
+    print("\napp.py reset_password_verify_number() being called\n")
+    #receives --> number
+
+    content_type = str(request.headers["Content-Type"]).lower()
+
+    from sidetasks import verify_header
+    verify_content_type = verify_header(content_type=content_type)
+
+    if verify_content_type != True:
+        return jsonify(verify_content_type), 400
+
+    else:
+        json_received = request.json
+
+        from sidetasks import resets_password_verify_number
+        result_alter_password = resets_password_verify_number(json_data=json_received)
         return jsonify(result_alter_password)
 
 
@@ -131,14 +154,6 @@ def reset_password_verify_code():
         from sidetasks import resets_password_verify_code
         result_verify_code = resets_password_verify_code(json_data=json_received)
         return jsonify(result_verify_code), 200
-
-
-@app.route("/emaail", methods=["POST"])
-def emaail():
-    json_received = request.json
-    from sidetasks import sends_email
-    enviar = sends_email(email=json_received["email"], code=json_received["code"])
-    return jsonify(enviar)
 
 
 app.run(host="0.0.0.0", debug=True)

@@ -91,3 +91,6 @@ or
 
 verifies_user() --> the response shall be one the these bellow
 {"error": "email received was not found on database"}
+
+
+(psycopg2.OperationalError) SSL connection has been closed unexpectedly
