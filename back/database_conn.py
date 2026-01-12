@@ -33,29 +33,28 @@ def verify_on_database(email: str, senha: str):
 
 
 def add_to_database(email: str, senha: str, name: str):
+    """Tries to write down the user received to the database"""
     print("\ndatabase_conn.py add_to_database() being called\n")
 
-    with Session() as session:
+    with Session() as session:      #using the Session from conn.py
         import sqlalchemy.exc
 
-        new_user = User(user_email=email, user_senha=senha, name=name)
+        new_user = User(user_email=email, user_senha=senha, name=name)      #we define the user to be added with User from conn.py
         session.add(new_user)
 
         try:
-            session.commit()
+            session.commit()                        #and try to commit him
             print("user cadastrado c sucesso\n")
             message: dict = {"response": "user added successfully"}
-            return message
+            return message      #returns this message if everything goes all alright
 
-        except sqlalchemy.exc.IntegrityError as e:
-            error = str(e).split()[0]
-            print("-->", error)
+        except sqlalchemy.exc.IntegrityError as e:      #if this Exception is raised
+            error = str(e).split()[0]                   #we put the Exception into a variable
 
-            if error == "(psycopg2.errors.UniqueViolation)":
+            if error == "(psycopg2.errors.UniqueViolation)":        #and check the variable to respond the request the better way
                 print("esse email ja existe\n")
                 message: dict = {"response": "this email already exists on database"}
                 return message
-
             elif error == "(psycopg2.errors.NotNullViolation)":
                 print("faltando alguma coluna")
                 print("n era pra acontecer este error\n")
@@ -71,32 +70,33 @@ def add_to_database(email: str, senha: str, name: str):
 
 
 def reset_password_on_database(email: str, new_password: str):
-    print("database_conn.py reset_password_on_database() being called\n")
+    """Tries to change the password directly into the database"""
+    print("\ndatabase_conn.py reset_password_on_database() being called\n")
 
     with Session() as session:
-
         from sqlalchemy import update
 
-        user = session.query(User).where(User.user_email == email).first()
-        if user is None:
+        user = session.query(User).where(User.user_email == email).first()  #checking if the email received exists in the database
+        if user is None:                                                    #if the email isnt written in the database
             print("email received was not found on database\n")
-            return False
+            message: dict = {"error": "email received was not found on database"}
+            return message                                                  #we return this message
 
-        consulta = update(User).where(User.user_email == email).values(user_senha=new_password)
-        session.execute(consulta)
+        mudar_senha = update(User).where(User.user_email == email).values(user_senha=new_password)     #if the email exists
+        session.execute(mudar_senha)            #we write the sql query to change the password
 
         try:
-            session.commit()
+            session.commit()                    #and try to commit it
             print("senha alterada c sucesso\n")
-            message: dict = {"response": "password changed successfully"}
-            return message
+            message: dict = {"response": "password changed successfully"}   #if it is successful
+            return message                                                  #the function returns this message
 
-        except Exception as e:
+        except Exception as e:                      #if some Exception is raised
             print("some Exception was raised\n"
                   "Exception bellow\n")
             print(e)
-            message: dict = {"error": "some error have occurred on our server, try to change the password again"}
-            return message
+            message: dict = {"error": f"{e}"}
+            return message                  #the function returns this message
 
 
 def write_sessioncode_on_database(session_code: str, email: str):

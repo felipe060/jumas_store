@@ -56,23 +56,23 @@ def adds_user(**kwargs):
     """Tries to add a new user to the database"""
     print("sidetasks.py adds_user() being called\n")
 
-    json_data = kwargs["json_data"]
+    json_data = kwargs["json_data"]         #i need 3 fields //email// and //senha// and //name//
     json_data_keys = json_data.keys()
 
-    if len(json_data_keys) != 3:
+    if len(json_data_keys) != 3:        #if i the request has anything different from 3 fields
         print("o json recebido tem um numero de campos diferente de 3\n")
         message: dict = {"error": "the json received has a number of fields different from 3"}
-        return message
+        return message                  #the function returns this message
 
-    elif len(json_data_keys) == 3:
+    elif len(json_data_keys) == 3:      #if we receive 3 fields
         for item in json_data_keys:
-            if item != "email" and item != "senha" and item != "name":
+            if item != "email" and item != "senha" and item != "name":      #we verify if they are the ones we want
                 print("o json recebido tem algum campo diferente dos requeridos\n")
                 message: dict = {"error": "the json file received has some field different from the required ones"}
-                return message
+                return message                              #anything different from the 3 fields we want, returns this message
         print("o json recebido tem exatamente 3 campos\n")
 
-    email = json_data["email"]
+    email = json_data["email"]      #just defining the variables with the json received
     senha = json_data["senha"]
     name = json_data["name"]
 
@@ -82,32 +82,26 @@ def adds_user(**kwargs):
 
 
 def resets_password(**kwargs):
-    print("sidetasks.py resets_password() being called\n")
+    """Resets the password"""
+    print("\nsidetasks.py resets_password() being called\n")
 
-    json_data = kwargs["json_data"]
-
+    json_data = kwargs["json_data"]     #i need 2 fields //email// and //new_password//
     json_data_keys = json_data.keys()
-    lista: list = []
 
-    for item in json_data_keys:
-        lista.append(item)
-
-    len_lista = len(lista)
-
-    if len_lista != 2:
+    if len(json_data_keys) != 2:        #if we receive a json with something different from 2 fields
         print("o json recebido tem um numero de campos diferente de 2\n")
         message: dict = {"error": "the json received has a number of fields different from 2"}
-        return message
+        return message                  #the function returns this message
 
-    elif len_lista == 2:
-        for item in lista:
-            if item != "email" and item != "new_password":
+    elif len(json_data_keys) == 2:      #if we receive exactly 2 fields
+        for item in json_data_keys:
+            if item != "email" and item != "new_password":      #we check if they are the required ones
                 print("j son recebido tem algum campo diferente dos requeridos\n")
                 message: dict = {"error": "the json received has some field different from the required ones"}
-                return message
+                return message                                  #if not, we return this message
         print("o json recebido tem exatamente 2 campos\n")
 
-    email = json_data["email"]
+    email = json_data["email"]                  #just defining the variables
     new_password = json_data["new_password"]
 
     from database_conn import reset_password_on_database
@@ -116,7 +110,8 @@ def resets_password(**kwargs):
 
 
 def generates_code():
-    print("sidetasks.py generates_code() being called\n")
+    """Just generates a random integer number between zero and 999.999"""
+    print("\nsidetasks.py generates_code() being called\n")
 
     from random import randint
     numero = randint(0, 999_999)
@@ -124,9 +119,10 @@ def generates_code():
 
 
 def sends_email(email_user: str, code: int):
+    """Tries to send an email to the user"""
     print("\nsidetasks.py sends_email() being called\n")
 
-    from dotenv import find_dotenv, load_dotenv
+    from dotenv import find_dotenv, load_dotenv     #the function needs 2 fields //email_user// and //code//
     from os import environ
     import resend
 
@@ -139,21 +135,20 @@ def sends_email(email_user: str, code: int):
     print("email_user --> ", email_user)
 
     try:
-        r = resend.Emails.send({
-            #"from": environ.get("RESEND_EMAIL"),
+        r = resend.Emails.send({            #trynna send the email
             "from": email_remetente,
             "to": email_user,
-            "subject": "Hello World",
+            "subject": "Code",
             "html": f"<p>your code --> <strong>{code}</strong></p>"
         })
         print("email sent successfully\n")
-        message: dict = {"success": "email was sent"}
-        return True
+        message: dict = {"success": "email was sent"}   #if the email is sent
+        return message          #the function returns this message
     except Exception as e:
-        print("Deu ruim aq. Exception right bellow\n")
+        print("Deu ruim aq. Exception right bellow\n")  #if some Exception is raised
         print(e)
-        message: dict = {"error": "some internal error have occurred"}
-        return False, e
+        message: dict = {"error": f"{e}"}
+        return message      #return this message
 
 
 def sends_email_2(email_user: str, code: int):
