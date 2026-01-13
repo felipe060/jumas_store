@@ -316,6 +316,19 @@ def resets_password_verify_code(**kwargs):
 
     from database_conn import lookfor_sessioncode_on_database
     result_query = lookfor_sessioncode_on_database(received_sessioncode=session_code)
-    print("seila result_query() --> ", result_query)
     return result_query[1]
+
+
+def pulls_products():
+    print("\nsidetasks.py pulls_products() being called\n")
+
+    from database_conn import pull_products_from_database
+    consulta = pull_products_from_database()
+
+    if consulta[0]:
+        print("produtos puxados de tb_products. consulta ran successfully\n")
+        return consulta[1]
+    elif not consulta[0]:
+        return consulta[1]
+
 

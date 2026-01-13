@@ -178,4 +178,30 @@ def reset_password_new_password():
         return jsonify(result_reset_password), 200
 
 
-app.run(host="0.0.0.0", debug=False)
+@app.route("/pull_products", methods=["GET"])
+@require_token
+def pull_products():
+    print("\n app.py pull_products() being called\n")
+    #sends all products from tb_products
+
+    content_type = str(request.headers["Content-Type"]).lower()
+
+    from sidetasks import verify_header
+    verify_content_type = verify_header(content_type=content_type)
+
+    if verify_content_type != True:
+        return jsonify(verify_content_type), 400
+
+    else:
+        from sidetasks import pulls_products
+        result_pulls_products = pulls_products()
+        return jsonify(result_pulls_products), 200
+
+@app.route("/verify_product", methods=["POST"])
+@require_token
+def verify_product():
+    print("\napp.py verify_product() being called\n")
+    #receives -->
+
+
+app.run(host="0.0.0.0", debug=True)

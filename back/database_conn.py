@@ -193,3 +193,33 @@ def lookfor_sessioncode_on_database(received_sessioncode: str):
             message: dict = {"error": "the sessioncode received didnt match on database"}
             #message: dict = {"error": False}
             return False, message
+
+
+def pull_products_from_database():
+    print("\ndatabase_conn.py pull_products_on_database() being called\n")
+
+    lista: list = []
+
+    with Session() as session:
+        try:
+            #consulta = session.query(Product).limit(2)
+            consulta = session.query(Product).all()
+            for item in consulta:
+                dicionario: dict = {
+                    "product_id": item.product_id,
+                    "name": item.name,
+                    "gender": item.gender,
+                    "material": item.material,
+                    "base_price": float(str(str(item.base_price).split("''"))[2:-2]),
+                    "description": item.description
+                }
+                lista.append(dicionario)
+                print(lista)
+                print(dicionario)
+            return True, lista
+
+        except Exception as e:
+            print("\nDeu ruim, some Exception was raised. Exception bellow\n"
+                  f"{e}")
+            return False, e
+
